@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TimeEntry {
 
+    //deneme123
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long timeEntryId;
