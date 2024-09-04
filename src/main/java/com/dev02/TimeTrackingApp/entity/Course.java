@@ -15,6 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Course {
+
+    //bu bir yorum satırıdır...
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courseId;
