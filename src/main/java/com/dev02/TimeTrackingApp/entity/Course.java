@@ -2,6 +2,7 @@ package com.dev02.TimeTrackingApp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder(toBuilder = true)
 public class Course {
 
     //bu bir yorum satırıdır...
