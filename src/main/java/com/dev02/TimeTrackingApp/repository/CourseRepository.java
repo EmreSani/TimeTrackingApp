@@ -1,4 +1,7 @@
 package com.dev02.TimeTrackingApp.repository;
 
-public interface CourseRepository {
+import com.dev02.TimeTrackingApp.entity.Course;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CourseRepository extends JpaRepository<Course, Long> {
 }

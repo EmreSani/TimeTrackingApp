@@ -14,4 +14,6 @@ public class SuccessMessages {
     public static final String USER_UPDATE = "your information has been updated successfully";
     public static final String USER_UPDATE_MESSAGE = "User is Updated Successfully";
 
+    public static final String COURSE_CREATE = "Course is Saved";
+
 }
