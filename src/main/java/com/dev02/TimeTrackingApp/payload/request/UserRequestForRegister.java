@@ -4,17 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequest {
+
+public class UserRequestForRegister {
 
     @NotNull
     @Size(min = 2, max = 30, message = "(${validatedValue}) {min} and {max} lengths allowed!")
@@ -39,10 +36,9 @@ public class UserRequest {
     private String email;
 
     @NotNull
-    private String currentPassword;
-
-    private String newPassword;
+    private String password;
 
     @NotNull
     private String ssn;
+
 }

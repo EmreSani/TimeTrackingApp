@@ -3,6 +3,7 @@ package com.dev02.TimeTrackingApp.service.validator;
 import com.dev02.TimeTrackingApp.entity.User;
 import com.dev02.TimeTrackingApp.exception.ConflictException;
 import com.dev02.TimeTrackingApp.payload.messages.ErrorMessages;
+import com.dev02.TimeTrackingApp.payload.request.UserRequest;
 import com.dev02.TimeTrackingApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,32 +35,34 @@ public class UniquePropertyValidator {
 
     }
 
-//    public void checkUniqueProperties(User user, AbstractUserRequest abstractUserRequest){
-//        String updatedUsername = "";
-//        String updatedSnn = "";
-//        String updatedPhone = "";
-//        String updatedEmail = "";
-//        boolean isChanced = false;
-//        if(!user.getUsername().equalsIgnoreCase(abstractUserRequest.getUsername())){
-//            updatedUsername = abstractUserRequest.getUsername();
-//            isChanced = true;
-//        }
-//        if(!user.getSsn().equalsIgnoreCase(abstractUserRequest.getSsn())){
-//            updatedSnn = abstractUserRequest.getSsn();
-//            isChanced = true;
-//        }
-//        if(!user.getPhoneNumber().equalsIgnoreCase(abstractUserRequest.getPhoneNumber())){
-//            updatedPhone = abstractUserRequest.getPhoneNumber();
-//            isChanced = true;
-//        }
-//        if(!user.getEmail().equalsIgnoreCase(abstractUserRequest.getEmail())){
-//            updatedEmail = abstractUserRequest.getEmail();
-//            isChanced = true;
-//        }
-//
-//        if(isChanced) {
-//            checkDuplicate(updatedUsername, updatedSnn, updatedPhone, updatedEmail);
-//        }
-//
-//    }
+    public void checkUniqueProperties(User user, UserRequest userRequest){
+        String updatedUsername = "";
+        String updatedSnn = "";
+        String updatedPhone = "";
+        String updatedEmail = "";
+
+        boolean isChanged = false;
+
+        if(!user.getUsername().equalsIgnoreCase(userRequest.getUsername())){
+            updatedUsername = userRequest.getUsername();
+            isChanged = true;
+        }
+        if(!user.getSsn().equalsIgnoreCase(userRequest.getSsn())){
+            updatedSnn = userRequest.getSsn();
+            isChanged = true;
+        }
+        if(!user.getPhoneNumber().equalsIgnoreCase(userRequest.getPhoneNumber())){
+            updatedPhone = userRequest.getPhoneNumber();
+            isChanged = true;
+        }
+        if(!user.getEmail().equalsIgnoreCase(userRequest.getEmail())){
+            updatedEmail = userRequest.getEmail();
+            isChanged = true;
+        }
+
+        if(isChanged) {
+            checkDuplicate(updatedUsername, updatedSnn, updatedPhone, updatedEmail);
+        }
+
+    }
 }
