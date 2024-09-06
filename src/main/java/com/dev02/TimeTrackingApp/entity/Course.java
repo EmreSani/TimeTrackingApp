@@ -18,9 +18,6 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class Course {
 
-    //bu bir yorum satırıdır...
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courseId;

@@ -3,6 +3,8 @@ package com.dev02.TimeTrackingApp.repository;
 import com.dev02.TimeTrackingApp.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
+
 public interface UserRepository extends JpaRepository <User, Long> {
     User findByUsernameEquals(String username);
 
