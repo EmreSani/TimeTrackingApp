@@ -1,12 +1,13 @@
 package com.dev02.TimeTrackingApp.payload.response;
 
+import com.dev02.TimeTrackingApp.entity.TimeEntry;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +18,5 @@ public class CourseResponse {
 
     private String courseName;
     private String description;
+    private List<TimeEntry> timeEntry;
 }

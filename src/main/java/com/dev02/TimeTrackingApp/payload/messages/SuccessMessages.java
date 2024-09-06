@@ -15,5 +15,10 @@ public class SuccessMessages {
     public static final String USER_UPDATE_MESSAGE = "User is Updated Successfully";
 
     public static final String COURSE_CREATE = "Course is Saved";
+    public static final String COURSES_FOUND = "Courses are Found Successfully";
+    public static final String COURSE_UPDATE = "Course is updated Successfully";
+
+
+    public static final String TIME_ADDED = "Time entry added successfully.";
 
 }
