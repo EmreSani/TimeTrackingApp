@@ -21,4 +21,13 @@ public class SuccessMessages {
 
     public static final String TIME_ADDED = "Time entry added successfully.";
 
+    public static final String DAILY_TIME_GET = "Daily Time entries fetched successfully";
+    public static final String PREVIOUS_TIME_GET = "Previous day Time entries fetched successfully";
+
+    public static final String WEEKLY_TIME_GET = "Weekly time entries fetched successfully";
+    public static final String PREVIOUS_WEEK_TIME_GET = "Previous Week Time entries fetched successfully";
+
+    public static final String MONTHLY_TIME_GET = "Monthly time entries fetched successfully";
+    public static final String PREVIOUS_MONTHLY_TIME_GET = "Previous monthly time entries fetched successfully";
+
 }
