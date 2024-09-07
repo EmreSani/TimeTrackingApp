@@ -3,6 +3,8 @@ package com.dev02.TimeTrackingApp.service.business;
 import com.dev02.TimeTrackingApp.entity.Course;
 import com.dev02.TimeTrackingApp.entity.TimeEntry;
 import com.dev02.TimeTrackingApp.entity.User;
+import com.dev02.TimeTrackingApp.entity.enums.TimePeriod;
+import com.dev02.TimeTrackingApp.payload.mappers.TimeEntryMapper;
 import com.dev02.TimeTrackingApp.payload.messages.SuccessMessages;
 import com.dev02.TimeTrackingApp.payload.request.TimeEntryRequest;
 import com.dev02.TimeTrackingApp.payload.response.ResponseMessage;
@@ -24,12 +26,13 @@ public class TimeEntryService {
 
     private final TimeEntryRepository timeEntryRepository;
     private final MethodHelper methodHelper;
+    private final TimeEntryMapper timeEntryMapper;
 
     // Updated method to return TimeResponse
+    //todo: mapper ile yapmayı düşün.
     public ResponseMessage<TimeResponse> addNewTimeEntry(TimeEntryRequest timeEntryRequest, HttpServletRequest httpRequest) {
         // Retrieve user
-        String username = (String) httpRequest.getAttribute("username");
-        User user = methodHelper.findByUsername(username);
+        User user = getUserFromRequest(httpRequest);
 
         // Retrieve course
         Course course = methodHelper.isCourseExist(timeEntryRequest.getCourseId());
@@ -89,27 +92,97 @@ public class TimeEntryService {
         return durationInMinutes;
     }
 
-
-    public ResponseMessage<List<TimeResponse>> getAllDailyTimeEntriesByUser(HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
-        User user = methodHelper.findByUsername(username);
-
-        // Get today's date range
-        LocalDateTime todayStart = LocalDate.now().atStartOfDay();
-        LocalDateTime todayEnd = todayStart.plusDays(1);
-
-        return getTimeEntriesForDateRange(user, todayStart, todayEnd, SuccessMessages.DAILY_TIME_GET);
+    public ResponseMessage<List<TimeResponse>> getDailyTimeEntriesByUser(HttpServletRequest request) {
+        return getTimeEntriesByPeriod(request, TimePeriod.DAY);
     }
 
-    public ResponseMessage<List<TimeResponse>> getAllPreviousDayTimeEntriesByUser(HttpServletRequest request) {
+    public ResponseMessage<List<TimeResponse>> getPreviousDayTimeEntriesByUser(HttpServletRequest request) {
+        return getTimeEntriesByPeriod(request, TimePeriod.PREVIOUS_DAY);
+    }
+
+    public ResponseMessage<List<TimeResponse>> getWeeklyTimeEntriesByUser(HttpServletRequest request) {
+        return getTimeEntriesByPeriod(request, TimePeriod.WEEK);
+    }
+
+    public ResponseMessage<List<TimeResponse>> getPreviousWeekTimeEntriesByUser(HttpServletRequest request) {
+        return getTimeEntriesByPeriod(request, TimePeriod.PREVIOUS_WEEK);
+    }
+
+    public ResponseMessage<List<TimeResponse>> getMonthlyTimeEntriesByUser(HttpServletRequest request) {
+        return getTimeEntriesByPeriod(request, TimePeriod.MONTH);
+    }
+
+    public ResponseMessage<List<TimeResponse>> getPreviousMonthTimeEntriesByUser(HttpServletRequest request) {
+        return getTimeEntriesByPeriod(request, TimePeriod.PREVIOUS_MONTH);
+    }
+
+
+    private User getUserFromRequest(HttpServletRequest request) {
         String username = (String) request.getAttribute("username");
-        User user = methodHelper.findByUsername(username);
+        return methodHelper.findByUsername(username);
+    }
 
-        // Get previous day's date range
-        LocalDateTime previousDayStart = LocalDate.now().minusDays(1).atStartOfDay();
-        LocalDateTime previousDayEnd = previousDayStart.plusDays(1);
+    private ResponseMessage<List<TimeResponse>> getTimeEntriesByPeriod(HttpServletRequest request, TimePeriod period) {
+        User user = getUserFromRequest(request);
+        return getTimeEntriesForPeriod(user, period, getSuccessMessageForPeriod(period));
+    }
 
-        return getTimeEntriesForDateRange(user, previousDayStart, previousDayEnd, SuccessMessages.PREVIOUS_TIME_GET);
+    private ResponseMessage<List<TimeResponse>> getTimeEntriesForPeriod(User user, TimePeriod period, String message) {
+        LocalDateTime[] dateRange = calculateDateRange(period);
+        return getTimeEntriesForDateRange(user, dateRange[0], dateRange[1], message);
+    }
+
+    private String getSuccessMessageForPeriod(TimePeriod period) {
+        switch (period) {
+            case PREVIOUS_DAY:
+                return SuccessMessages.PREVIOUS_TIME_GET;
+            case WEEK:
+                return SuccessMessages.WEEKLY_TIME_GET;
+            case PREVIOUS_WEEK:
+                return SuccessMessages.PREVIOUS_WEEK_TIME_GET;
+            case MONTH:
+                return SuccessMessages.MONTHLY_TIME_GET;
+            case PREVIOUS_MONTH:
+                return SuccessMessages.PREVIOUS_MONTHLY_TIME_GET;
+            case DAY:
+            default:
+                return SuccessMessages.DAILY_TIME_GET;
+        }
+    }
+
+    private LocalDateTime[] calculateDateRange(TimePeriod period) {
+        LocalDateTime startDateTime;
+        LocalDateTime endDateTime;
+
+        switch (period) {
+            case PREVIOUS_DAY:
+                startDateTime = LocalDate.now().minusDays(1).atStartOfDay();
+                endDateTime = startDateTime.plusDays(1);
+                break;
+            case WEEK:
+                startDateTime = LocalDate.now().with(DayOfWeek.MONDAY).atStartOfDay();
+                endDateTime = startDateTime.plusWeeks(1);
+                break;
+            case PREVIOUS_WEEK:
+                startDateTime = LocalDate.now().minusWeeks(1).with(DayOfWeek.MONDAY).atStartOfDay();
+                endDateTime = startDateTime.plusWeeks(1);
+                break;
+            case MONTH:
+                startDateTime = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+                endDateTime = startDateTime.plusMonths(1);
+                break;
+            case PREVIOUS_MONTH:
+                startDateTime = LocalDate.now().minusMonths(1).withDayOfMonth(1).atStartOfDay();
+                endDateTime = startDateTime.plusMonths(1);
+                break;
+            case DAY:
+            default:
+                startDateTime = LocalDate.now().atStartOfDay();
+                endDateTime = startDateTime.plusDays(1);
+                break;
+        }
+
+        return new LocalDateTime[]{startDateTime, endDateTime};
     }
 
     private ResponseMessage<List<TimeResponse>> getTimeEntriesForDateRange(User user, LocalDateTime startDateTime, LocalDateTime endDateTime, String message) {
@@ -131,52 +204,89 @@ public class TimeEntryService {
     }
 
 
-    public ResponseMessage<List<TimeResponse>> getAllWeeklyTimeEntriesByUser(HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
-        User user = methodHelper.findByUsername(username);
+    public ResponseMessage<List<TimeResponse>> getAllTimeEntries(HttpServletRequest request) {
+        User user = getUserFromRequest(request);
 
-        // Get the start of the week (Monday)
-        LocalDateTime startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY).atStartOfDay();
-        LocalDateTime endOfWeek = startOfWeek.plusWeeks(1);
+        List<TimeEntry> timeEntryList = timeEntryRepository.findAll();
 
-        return getTimeEntriesForDateRange(user, startOfWeek, endOfWeek, SuccessMessages.WEEKLY_TIME_GET);
+        List<TimeResponse> timeResponses = timeEntryList.stream()
+                .map(timeEntry -> new TimeResponse(
+                        timeEntry.getCourse().getCourseId(),
+                        timeEntry.getCourse().getCourseName(),
+                        timeEntry.getDurationInMinutes(),
+                        timeEntry.getStartDateTime(),
+                        timeEntry.getEndDateTime()))
+                .toList();
 
+        return ResponseMessage.<List<TimeResponse>>builder().message
+                        (SuccessMessages.TIME_FETCHED)
+                .object(timeResponses)
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 
-    public ResponseMessage<List<TimeResponse>> getAllPreviousWeekTimeEntriesByUser(HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
-        User user = methodHelper.findByUsername(username);
 
-        // Calculate the previous week range (start of the previous week to end of the previous week)
-        LocalDateTime startOfPreviousWeek = LocalDate.now().minusWeeks(1).with(DayOfWeek.MONDAY).atStartOfDay();
-        LocalDateTime endOfPreviousWeek = startOfPreviousWeek.plusWeeks(1);
+    public ResponseMessage<TimeResponse> updateTimeEntry(TimeEntryRequest timeEntryRequest, Long timeEntryId, HttpServletRequest request) {
+        User user = getUserFromRequest(request);
 
-        return getTimeEntriesForDateRange(user, startOfPreviousWeek, endOfPreviousWeek, SuccessMessages.WEEKLY_TIME_GET);
+        TimeEntry timeEntryToUpdate = methodHelper.isEntryTimeExist(timeEntryId);
+
+        // Retrieve course
+        Course course = methodHelper.isCourseExist(timeEntryRequest.getCourseId());
+
+        // Get start and end times
+        LocalDateTime startDateTime = timeEntryRequest.getStartDateTime();
+        LocalDateTime endDateTime = timeEntryRequest.getEndDateTime();
+
+        // Calculate duration
+        Duration duration = Duration.between(startDateTime, endDateTime);
+        long durationInMinutes = duration.toMinutes();
+
+        // Update or create time entries
+        long totalMinutes = 0;
+
+        if (startDateTime.toLocalDate().equals(endDateTime.toLocalDate())) {
+            // Update existing entry if within the same day
+            timeEntryToUpdate.setCourse(course);
+            timeEntryToUpdate.setStartDateTime(startDateTime);
+            timeEntryToUpdate.setEndDateTime(endDateTime);
+            timeEntryToUpdate.setDurationInMinutes(durationInMinutes);
+            totalMinutes = durationInMinutes;
+        } else {
+            // Handle multiple days
+            LocalDateTime endOfDay = startDateTime.toLocalDate().atTime(LocalTime.MAX);
+            long firstDayMinutes = Duration.between(startDateTime, endOfDay).toMinutes();
+
+            LocalDateTime startOfNextDay = endDateTime.toLocalDate().atStartOfDay();
+            long lastDayMinutes = Duration.between(startOfNextDay, endDateTime).toMinutes();
+
+            // Update existing or create new entries
+            timeEntryToUpdate.setCourse(course);
+            timeEntryToUpdate.setStartDateTime(startDateTime);
+            timeEntryToUpdate.setEndDateTime(endOfDay);
+            timeEntryToUpdate.setDurationInMinutes(firstDayMinutes);
+            timeEntryRepository.save(timeEntryToUpdate);
+
+            TimeEntry secondEntry = new TimeEntry();
+            secondEntry.setUser(user);
+            secondEntry.setCourse(course);
+            secondEntry.setStartDateTime(startOfNextDay);
+            secondEntry.setEndDateTime(endDateTime);
+            secondEntry.setDurationInMinutes(lastDayMinutes);
+            timeEntryRepository.save(secondEntry);
+
+            totalMinutes = firstDayMinutes + lastDayMinutes;
+        }
+
+
+        TimeResponse timeResponse = timeEntryMapper.mapTimeEntryToTimeResponse(timeEntryToUpdate, totalMinutes);
+
+        return ResponseMessage.<TimeResponse>builder()
+                .message(SuccessMessages.TIME_UPDATE)
+                .httpStatus(HttpStatus.OK)
+                .object(timeResponse)
+                .build();
     }
-
-
-    public ResponseMessage<List<TimeResponse>> getAllMonthlyTimeEntriesByUser(HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
-        User user = methodHelper.findByUsername(username);
-
-        // Get the start of the month
-        LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
-        LocalDateTime endOfMonth = startOfMonth.plusMonths(1);
-
-        return getTimeEntriesForDateRange(user, startOfMonth, endOfMonth, SuccessMessages.MONTHLY_TIME_GET);
-    }
-
-    public ResponseMessage<List<TimeResponse>> getAllPreviousMonthTimeEntriesByUser(HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
-        User user = methodHelper.findByUsername(username);
-
-        // Calculate the previous month range (start of the previous month to end of the previous month)
-        LocalDateTime startOfPreviousMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1).atStartOfDay();
-        LocalDateTime endOfPreviousMonth = startOfPreviousMonth.plusMonths(1);
-
-        return getTimeEntriesForDateRange(user, startOfPreviousMonth, endOfPreviousMonth, SuccessMessages.PREVIOUS_MONTHLY_TIME_GET);
-    }
-
 
 }
 

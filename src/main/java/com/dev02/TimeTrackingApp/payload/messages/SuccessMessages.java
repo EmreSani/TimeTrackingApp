@@ -20,6 +20,8 @@ public class SuccessMessages {
 
 
     public static final String TIME_ADDED = "Time entry added successfully.";
+    public static final String TIME_UPDATE = "Time entry updated successfully.";
+    public static final String TIME_FETCHED = "All time entries by user fetched successfully.";
 
     public static final String DAILY_TIME_GET = "Daily Time entries fetched successfully";
     public static final String PREVIOUS_TIME_GET = "Previous day Time entries fetched successfully";

@@ -21,7 +21,7 @@ public class ErrorMessages {
     public static final String NOT_FOUND_COURSE_MESSAGE = "Error: Course not found with id %s";
     public static final String NOT_PERMITTED_TO_DELETE_COURSE = "You do not have any permission to delete this course";
 
-
+    public static final String NOT_FOUND_TIME_ENTRY_MESSAGE = "Error: Time Entry not found with id %s";
 
 
 }
