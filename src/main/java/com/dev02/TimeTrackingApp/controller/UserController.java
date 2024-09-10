@@ -78,6 +78,5 @@ public class UserController {
         return userService.updateUserForUsers(userRequest, request) ;
     }
 
-    //todo: user kendini kayıt ederken kurs seçebilmeli, sonra da istediği zaman kurslarını güncelleyebilmeli.
 
 }

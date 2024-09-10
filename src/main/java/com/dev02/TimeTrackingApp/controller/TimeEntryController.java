@@ -20,8 +20,6 @@ public class TimeEntryController {
 
     private final TimeEntryService timeEntryService;
 
-    //todo:update, delete
-
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseMessage<TimeResponse> addNewTimeEntry(@RequestBody @Valid TimeEntryRequest timeEntryRequest
@@ -77,6 +75,16 @@ public class TimeEntryController {
                                                             Long timeEntryId,
                                                             HttpServletRequest request){
         return timeEntryService.updateTimeEntry(timeEntryRequest, timeEntryId, request);
+    }
+
+    @DeleteMapping("/deleteTimeEntry/{timeResponseId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public ResponseMessage<TimeResponse> deleteTimeResponse(@PathVariable Long timeId,
+                                                            HttpServletRequest httpServletRequest
+                                                            ){
+
+        return timeEntryService.deleteTimeEntry(timeId, httpServletRequest);
+
     }
 
 

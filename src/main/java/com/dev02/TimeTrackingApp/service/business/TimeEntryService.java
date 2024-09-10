@@ -4,7 +4,9 @@ import com.dev02.TimeTrackingApp.entity.Course;
 import com.dev02.TimeTrackingApp.entity.TimeEntry;
 import com.dev02.TimeTrackingApp.entity.User;
 import com.dev02.TimeTrackingApp.entity.enums.TimePeriod;
+import com.dev02.TimeTrackingApp.exception.BadRequestException;
 import com.dev02.TimeTrackingApp.payload.mappers.TimeEntryMapper;
+import com.dev02.TimeTrackingApp.payload.messages.ErrorMessages;
 import com.dev02.TimeTrackingApp.payload.messages.SuccessMessages;
 import com.dev02.TimeTrackingApp.payload.request.TimeEntryRequest;
 import com.dev02.TimeTrackingApp.payload.response.ResponseMessage;
@@ -13,6 +15,7 @@ import com.dev02.TimeTrackingApp.repository.TimeEntryRepository;
 import com.dev02.TimeTrackingApp.service.helper.MethodHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -288,6 +291,19 @@ public class TimeEntryService {
                 .build();
     }
 
+    public ResponseMessage<TimeResponse> deleteTimeEntry(Long timeId, HttpServletRequest httpServletRequest) {
+
+        User user = getUserFromRequest(httpServletRequest);
+
+        TimeEntry timeEntryToDelete = methodHelper.isEntryTimeExist(timeId);
+        if (user.getTimeEntries().contains(timeEntryToDelete)) {
+            timeEntryRepository.delete(timeEntryToDelete);
+            return ResponseMessage.<TimeResponse>builder().message(SuccessMessages.TIME_DELETE)
+                    .httpStatus(HttpStatus.NO_CONTENT)
+                    .object(timeEntryMapper.mapTimeEntryToTimeResponse(timeEntryToDelete, timeEntryToDelete.getDurationInMinutes())).build();
+        } else throw new BadRequestException(ErrorMessages.NOT_PERMITTED_TO_DELETE_TIME_ENTRY);
+
+    }
 }
 
 
