@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,6 +69,7 @@ public class UserService {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+
         Set<String> roles = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -75,16 +77,16 @@ public class UserService {
 
         Optional<String> role = roles.stream().findFirst();
 
-        LoginResponse loginResponse = LoginResponse.builder()
-                .username(userDetails.getUsername())
-                .token(token.substring(7))
-                .name(userDetails.getName())
-                .ssn(userDetails.getSsn())
-                .role(String.valueOf(role))
-                .build();
+        LoginResponse.LoginResponseBuilder loginResponse = LoginResponse.builder();
+        loginResponse.username(userDetails.getUsername());
+        loginResponse.token(token.substring(7));
+        loginResponse.name(userDetails.getName());
+        loginResponse.ssn(userDetails.getSsn());
+        // !!! role bilgisi varsa response nesnesindeki degisken setleniyor
+        role.ifPresent(loginResponse::role);
+        // !!! AuthResponse nesnesi ResponseEntity ile donduruyoruz
+        return ResponseEntity.ok(loginResponse.build());
 
-        // SigninResponse nesnesi ResponseEntity ile donduruluyor
-        return ResponseEntity.ok(loginResponse);
     }
 
     public ResponseEntity<UserResponse> register(UserRequestForRegister userRequestForRegister) {
@@ -183,5 +185,31 @@ public class UserService {
         String message = SuccessMessages.USER_UPDATE;
 
         return ResponseEntity.ok(message);
+    }
+
+    public ResponseMessage<UserResponse> saveUser(UserRequestForRegister userRequest, String userRole) {
+
+        //!!! username - ssn- phoneNumber unique mi kontrolu ??
+        uniquePropertyValidator.checkDuplicate(userRequest.getUsername(),userRequest.getSsn(),
+                userRequest.getPhoneNumber(),userRequest.getEmail());
+        //!!! DTO --> POJO
+        User user = userMapper.mapUserRequestToUser(userRequest);
+        // !!! Rol bilgisi setleniyor
+        if(userRole.equalsIgnoreCase(RoleType.ADMIN.name())){
+            if(Objects.equals(userRequest.getUsername(),"Admin")){
+                user.setBuilt_in(true);
+            }
+            user.setUserRole(userRoleService.getUserRole(RoleType.ADMIN));
+        }
+        // !!! password encode ediliyor
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Advisor degil
+
+        User savedUser = userRepository.save(user);
+
+        return ResponseMessage.<UserResponse>builder()
+                .message(SuccessMessages.USER_CREATE)
+                .object(userMapper.mapUserToUserResponse(savedUser))
+                .build() ;
     }
 }

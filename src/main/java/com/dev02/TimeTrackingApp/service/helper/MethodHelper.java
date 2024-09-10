@@ -14,9 +14,6 @@ import com.dev02.TimeTrackingApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 @Component
 @RequiredArgsConstructor
 public class MethodHelper {

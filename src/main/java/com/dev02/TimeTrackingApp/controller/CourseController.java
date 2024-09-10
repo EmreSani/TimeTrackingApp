@@ -3,7 +3,6 @@ package com.dev02.TimeTrackingApp.controller;
 import com.dev02.TimeTrackingApp.payload.request.CourseRequest;
 import com.dev02.TimeTrackingApp.payload.response.CourseResponse;
 import com.dev02.TimeTrackingApp.payload.response.ResponseMessage;
-import com.dev02.TimeTrackingApp.payload.response.UserResponse;
 import com.dev02.TimeTrackingApp.service.business.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +20,10 @@ public class CourseController {
 
     private final CourseService courseService;
 
-
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public ResponseMessage<CourseResponse> createCourse(@RequestBody @Valid CourseRequest courseRequest){
-        return courseService.createCourse(courseRequest);
+    public ResponseMessage<CourseResponse> createCourse(@RequestBody @Valid CourseRequest courseRequest, HttpServletRequest httpServletRequest){
+        return courseService.createCourse(courseRequest, httpServletRequest);
     }
 
     // http://localhost:8080/course/{courseId} + GET

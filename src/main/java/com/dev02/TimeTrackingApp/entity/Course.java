@@ -36,4 +36,7 @@ public class Course {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime courseLastUpdateTime;
 
+    @ManyToOne
+    private User user;
+
 }

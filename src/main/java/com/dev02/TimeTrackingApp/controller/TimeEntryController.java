@@ -10,61 +10,62 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.sql.Time;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/timeEntry")
 @RequiredArgsConstructor
 public class TimeEntryController {
 
     private final TimeEntryService timeEntryService;
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<TimeResponse> addNewTimeEntry(@RequestBody @Valid TimeEntryRequest timeEntryRequest
     , HttpServletRequest httpRequest){
         return timeEntryService.addNewTimeEntry(timeEntryRequest, httpRequest);
     }
+    //todo: farklı dersleri aynı saatte çalışabiliyoruz, bunun önlenmesi lazım.
 
     @GetMapping("/getAllDailyTimeEntriesByUser")
-    @PreAuthorize("hasAnyAuthority('ADMIN,'USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllDailyTimeEntriesByUser(HttpServletRequest request){
         return timeEntryService.getDailyTimeEntriesByUser(request);
     }
 
     @GetMapping("/getAllWeeklyTimeEntriesByUser")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllWeeklyTimeEntriesByUser(HttpServletRequest request){
         return timeEntryService.getWeeklyTimeEntriesByUser(request);
     }
 
     @GetMapping("/getAllMonthlyTimeEntriesByUser")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllMonthlyTimeEntriesByUser(HttpServletRequest request){
         return timeEntryService.getMonthlyTimeEntriesByUser(request);
     }
 
     @GetMapping("/getAllPreviousDayTimeEntriesByUser")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllPreviousDayTimeEntriesByUser(HttpServletRequest request) {
         return timeEntryService.getPreviousDayTimeEntriesByUser(request);
     }
 
     @GetMapping("/getAllPreviousWeekTimeEntriesByUser")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllPreviousWeekTimeEntriesByUser(HttpServletRequest request) {
         return timeEntryService.getPreviousWeekTimeEntriesByUser(request);
     }
 
     @GetMapping("/getAllPreviousMonthTimeEntriesByUser")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllPreviousMonthTimeEntriesByUser(HttpServletRequest request) {
         return timeEntryService.getPreviousMonthTimeEntriesByUser(request);
     }
 
     @GetMapping("/allEntriesByUser")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllTimeEntriesByUser(HttpServletRequest request){
         return timeEntryService.getAllTimeEntries(request);
     }
@@ -78,7 +79,7 @@ public class TimeEntryController {
     }
 
     @DeleteMapping("/deleteTimeEntry/{timeResponseId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<TimeResponse> deleteTimeResponse(@PathVariable Long timeId,
                                                             HttpServletRequest httpServletRequest
                                                             ){

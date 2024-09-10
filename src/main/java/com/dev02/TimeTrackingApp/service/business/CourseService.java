@@ -31,10 +31,14 @@ public class CourseService {
     private final CourseMapper courseMapper;
     private final MethodHelper methodHelper;
 
-    public ResponseMessage<CourseResponse> createCourse(CourseRequest courseRequest) {
+
+    public ResponseMessage<CourseResponse> createCourse(CourseRequest courseRequest, HttpServletRequest httpServletRequest) {
+        String username = (String) httpServletRequest.getAttribute("username");
+        User user = methodHelper.findByUsername(username);
 
         Course course = courseMapper.mapCourseRequestToCourse(courseRequest);
         course.setCourseCreateTime(LocalDateTime.now());
+        course.setUser(user);
 
         courseRepository.save(course);
 
@@ -69,7 +73,7 @@ public class CourseService {
         String username = (String) request.getAttribute("username");
         User user = methodHelper.findByUsername(username);
 
-        Set<Course> courseList = user.getCourses();
+        List<Course> courseList = user.getCourses();
 
         // Kursları CourseResponse'a dönüştür
         Set<CourseResponse> courseResponseSet = courseList.stream()
@@ -93,7 +97,7 @@ public class CourseService {
             course.setCourseName(courseRequest.getCourseName());
         }
         if (!courseRequest.getDescription().isEmpty()) {
-            course.setDescription(course.getDescription());
+            course.setDescription(courseRequest.getDescription());
         }
 
         course.setCourseId(courseId);

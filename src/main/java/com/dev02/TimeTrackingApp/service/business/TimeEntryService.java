@@ -20,7 +20,10 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,14 +47,33 @@ public class TimeEntryService {
         LocalDateTime startDateTime = timeEntryRequest.getStartDateTime();
         LocalDateTime endDateTime = timeEntryRequest.getEndDateTime();
 
+        // Aynı zaman aralığında birden fazla giriş olup olmadığını kontrol et
+        if (isOverlappingTimeEntry(user, course, startDateTime, endDateTime)) {
+            return ResponseMessage.<TimeResponse>builder()
+                    .message("Time entry overlaps with an existing entry.")
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
         // Calculate and save time entries
         long totalMinutes = calculateAndSaveTimeEntries(startDateTime, endDateTime, user, course);
 
+        // Check if the course has overlapping entries
+        long totalMinutesForCourse = calculateTotalMinutesForCourse(course, user, startDateTime.toLocalDate(), endDateTime.toLocalDate());
+
+//        // Create TimeResponse
+//        TimeResponse timeResponse = new TimeResponse(
+//                course.getCourseId(),
+//                course.getCourseName(),
+//                totalMinutes,
+//                startDateTime,
+//                endDateTime
+//        );
         // Create TimeResponse
         TimeResponse timeResponse = new TimeResponse(
                 course.getCourseId(),
                 course.getCourseName(),
-                totalMinutes,
+                totalMinutesForCourse,
                 startDateTime,
                 endDateTime
         );
@@ -59,6 +81,19 @@ public class TimeEntryService {
         return ResponseMessage.<TimeResponse>builder().message(SuccessMessages.TIME_ADDED)
                 .httpStatus(HttpStatus.OK)
                 .object(timeResponse).build();
+    }
+
+    private long calculateTotalMinutesForCourse(Course course, User user, LocalDate startDate, LocalDate endDate) {
+        List<TimeEntry> entries = timeEntryRepository.findByUserAndCourseAndStartDateTimeBetween(user, course, startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
+        return entries.stream()
+                .mapToLong(TimeEntry::getDurationInMinutes)
+                .sum();
+    }
+
+    private boolean isOverlappingTimeEntry(User user, Course course, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        List<TimeEntry> existingEntries = timeEntryRepository.findByUserAndCourseAndStartDateTimeBetween(user, course, startDateTime, endDateTime);
+
+        return !existingEntries.isEmpty();
     }
 
     // Updated to return total minutes worked
@@ -160,51 +195,100 @@ public class TimeEntryService {
         switch (period) {
             case PREVIOUS_DAY:
                 startDateTime = LocalDate.now().minusDays(1).atStartOfDay();
-                endDateTime = startDateTime.plusDays(1);
+                endDateTime = startDateTime.plusDays(1).minusSeconds(1);
                 break;
             case WEEK:
                 startDateTime = LocalDate.now().with(DayOfWeek.MONDAY).atStartOfDay();
-                endDateTime = startDateTime.plusWeeks(1);
+                endDateTime = startDateTime.plusWeeks(1).minusSeconds(1);
                 break;
             case PREVIOUS_WEEK:
                 startDateTime = LocalDate.now().minusWeeks(1).with(DayOfWeek.MONDAY).atStartOfDay();
-                endDateTime = startDateTime.plusWeeks(1);
+                endDateTime = startDateTime.plusWeeks(1).minusSeconds(1);
                 break;
             case MONTH:
                 startDateTime = LocalDate.now().withDayOfMonth(1).atStartOfDay();
-                endDateTime = startDateTime.plusMonths(1);
+                endDateTime = startDateTime.plusMonths(1).minusSeconds(1);
                 break;
             case PREVIOUS_MONTH:
                 startDateTime = LocalDate.now().minusMonths(1).withDayOfMonth(1).atStartOfDay();
-                endDateTime = startDateTime.plusMonths(1);
+                endDateTime = startDateTime.plusMonths(1).minusSeconds(1);
                 break;
             case DAY:
             default:
                 startDateTime = LocalDate.now().atStartOfDay();
-                endDateTime = startDateTime.plusDays(1);
+                endDateTime = startDateTime.plusDays(1).minusSeconds(1);
                 break;
         }
 
         return new LocalDateTime[]{startDateTime, endDateTime};
     }
 
+
+//    private ResponseMessage<List<TimeResponse>> getTimeEntriesForDateRange(User user, LocalDateTime startDateTime, LocalDateTime endDateTime, String message) {
+//
+//        List<TimeEntry> timeEntries = timeEntryRepository.findByUserAndStartDateTimeBetween(user, startDateTime, endDateTime);
+//
+//        System.out.println("Start Date: " + startDateTime + ", End Date: " + endDateTime);
+//    //    List<TimeEntry> testTimeEntries = timeEntryRepository.findByUserAndStartDateTimeBetween(user, LocalDateTime.parse("2024-09-06T00:00:00"), LocalDateTime.parse("2024-09-11T23:59:59"));
+//        System.out.println("Found Time Entries: " + timeEntries.size());
+//
+//        List<TimeResponse> timeResponses = timeEntries.stream()
+//                .map(timeEntry -> new TimeResponse(
+//                        timeEntry.getCourse().getCourseId(),
+//                        timeEntry.getCourse().getCourseName(),
+//                        timeEntry.getDurationInMinutes(),
+//                        timeEntry.getStartDateTime(),
+//                        timeEntry.getEndDateTime()))
+//                .collect(Collectors.toList());
+//
+//        return ResponseMessage.<List<TimeResponse>>builder()
+//                .object(timeResponses)
+//                .message(message)
+//                .build();
+//    }
+
     private ResponseMessage<List<TimeResponse>> getTimeEntriesForDateRange(User user, LocalDateTime startDateTime, LocalDateTime endDateTime, String message) {
+        // Get all time entries within the specified date range
         List<TimeEntry> timeEntries = timeEntryRepository.findByUserAndStartDateTimeBetween(user, startDateTime, endDateTime);
 
-        List<TimeResponse> timeResponses = timeEntries.stream()
-                .map(timeEntry -> new TimeResponse(
-                        timeEntry.getCourse().getCourseId(),
-                        timeEntry.getCourse().getCourseName(),
-                        timeEntry.getDurationInMinutes(),
-                        timeEntry.getStartDateTime(),
-                        timeEntry.getEndDateTime()))
-                .collect(Collectors.toList());
+        // Print debug information
+        System.out.println("Start Date: " + startDateTime + ", End Date: " + endDateTime);
+        System.out.println("Found Time Entries: " + timeEntries.size());
 
+        // Create a map to accumulate total minutes for each course
+        Map<Long, TimeResponse> courseTimeMap = new HashMap<>();
+
+        // Process each time entry
+        for (TimeEntry timeEntry : timeEntries) {
+            Course course = timeEntry.getCourse();
+            long courseId = course.getCourseId();
+            String courseName = course.getCourseName();
+            long durationInMinutes = timeEntry.getDurationInMinutes();
+
+            // If the course is already in the map, update the total minutes
+            if (courseTimeMap.containsKey(courseId)) {
+                TimeResponse existingResponse = courseTimeMap.get(courseId);
+                long updatedTotalMinutes = existingResponse.getTotalMinutesWorked() + durationInMinutes;
+                existingResponse.setTotalMinutesWorked(updatedTotalMinutes);
+            } else {
+                // Otherwise, add a new entry to the map
+                TimeResponse timeResponse = new TimeResponse(courseId, courseName, durationInMinutes, timeEntry.getStartDateTime(), timeEntry.getEndDateTime());
+                courseTimeMap.put(courseId, timeResponse);
+            }
+        }
+        //todo: time response döndürürken saat aralığını doğru dönmüyor, birden çok saat aralığı varsa onları postmande düzgünce göremiyoruz.
+        //todo: belki time responseda saat aralığını iptal edebiliriz.
+
+        // Convert the map values to a list
+        List<TimeResponse> timeResponses = new ArrayList<>(courseTimeMap.values());
+
+        // Return the response message with the aggregated time entries
         return ResponseMessage.<List<TimeResponse>>builder()
                 .object(timeResponses)
                 .message(message)
                 .build();
     }
+
 
 
     public ResponseMessage<List<TimeResponse>> getAllTimeEntries(HttpServletRequest request) {

@@ -16,6 +16,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CourseResponse {
 
+    private Long id;
     private String courseName;
     private String description;
     private List<TimeEntry> timeEntry;
