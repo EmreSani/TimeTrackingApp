@@ -212,4 +212,8 @@ public class UserService {
                 .object(userMapper.mapUserToUserResponse(savedUser))
                 .build() ;
     }
+
+    public long countAllAdmins(){
+        return userRepository.countAdmin(RoleType.ADMIN);
+    }
 }
