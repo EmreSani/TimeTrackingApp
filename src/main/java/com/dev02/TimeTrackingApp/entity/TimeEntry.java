@@ -22,8 +22,9 @@ public class TimeEntry {
     @ManyToOne
     private User user;
 
-    @OneToOne
+    @ManyToOne
     private Course course;
+
 
     private double hours; //0.0
 

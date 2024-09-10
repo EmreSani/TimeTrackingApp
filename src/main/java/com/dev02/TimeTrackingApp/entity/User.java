@@ -61,17 +61,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<TimeEntry> timeEntries;
 
-    @ManyToMany
-    @JsonIgnore
-    @JoinTable(
-            name ="course_user_table",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
-    private Set<Course> courses;
-
-
-
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Course> courses;
 
 }

@@ -17,7 +17,7 @@ public class CourseMapper {
 
     public CourseResponse mapCourseToCourseResponse (Course course){
 
-        return CourseResponse.builder().courseName(course.getCourseName())
+        return CourseResponse.builder().courseName(course.getCourseName()).id(course.getCourseId())
                 .description(course.getDescription()).timeEntry(course.getTimeEntries()).build();
 
     }

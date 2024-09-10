@@ -5,7 +5,6 @@ public enum RoleType {
     ADMIN("Admin"),
     USER("User");
 
-
     public final String name;
 
     RoleType(String name) {
