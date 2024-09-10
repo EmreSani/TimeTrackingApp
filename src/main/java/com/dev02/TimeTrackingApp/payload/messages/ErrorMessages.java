@@ -24,4 +24,6 @@ public class ErrorMessages {
     public static final String NOT_FOUND_TIME_ENTRY_MESSAGE = "Error: Time Entry not found with id %s";
 
 
+    public static final String NOT_PERMITTED_TO_DELETE_TIME_ENTRY = "You do not have any permission to delete this time entry";
+
 }
