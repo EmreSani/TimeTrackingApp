@@ -69,15 +69,15 @@ public class TimeEntryController {
         return timeEntryService.getAllTimeEntries(request);
     }
 
-    @PutMapping("/updateTimeEntry")
+    @PutMapping("/updateTimeEntry/{timeEntryId}")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseMessage<TimeResponse> updateTimeResponse(@RequestBody @Valid TimeEntryRequest timeEntryRequest,
-                                                            Long timeEntryId,
+                                                           @PathVariable Long timeEntryId,
                                                             HttpServletRequest request){
         return timeEntryService.updateTimeEntry(timeEntryRequest, timeEntryId, request);
     }
 
-    @DeleteMapping("/deleteTimeEntry/{timeResponseId}")
+    @DeleteMapping("/deleteTimeEntry/{timeId}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<TimeResponse> deleteTimeResponse(@PathVariable Long timeId,
                                                             HttpServletRequest httpServletRequest

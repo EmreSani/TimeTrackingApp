@@ -16,7 +16,6 @@ import com.dev02.TimeTrackingApp.service.helper.MethodHelper;
 import com.dev02.TimeTrackingApp.service.validator.TimeEntryValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -53,16 +52,18 @@ public class TimeEntryService {
         timeEntryValidator.validateTimeEntry(user, startDateTime, endDateTime);
 
         // Zaman çakışması yoksa kaydı oluştur
-        long totalMinutes = calculateAndSaveTimeEntries(startDateTime, endDateTime, user, course);
+       TimeEntry timeEntry = calculateAndSaveTimeEntries(startDateTime, endDateTime, user, course);
 
         // Check if the course has overlapping entries
         long totalMinutesForCourse = calculateTotalMinutesForCourse(course, user, startDateTime.toLocalDate(), endDateTime.toLocalDate());
 
         // Create TimeResponse
         TimeResponse timeResponse = new TimeResponse(
+                timeEntry.getTimeEntryId(),
                 course.getCourseId(),
                 course.getCourseName(),
-                totalMinutesForCourse
+                totalMinutesForCourse,
+                timeEntry.getStartDateTime()
         );
 
         return ResponseMessage.<TimeResponse>builder().message(SuccessMessages.TIME_ADDED)
@@ -79,24 +80,51 @@ public class TimeEntryService {
     }
 
     // Updated to return total minutes worked
-    private long calculateAndSaveTimeEntries(LocalDateTime startDateTime, LocalDateTime endDateTime, User user, Course course) {
-        long totalMinutes = 0;
-        if (startDateTime.toLocalDate().equals(endDateTime.toLocalDate())) {
-            // Same day work
-            totalMinutes = saveTimeEntry(startDateTime, endDateTime, user, course);
-        } else {
-            // Spread across multiple days
-            LocalDateTime endOfDay = startDateTime.toLocalDate().atTime(LocalTime.MAX);
-            totalMinutes += saveTimeEntry(startDateTime, endOfDay, user, course);
+//    private long calculateAndSaveTimeEntries(LocalDateTime startDateTime, LocalDateTime endDateTime, User user, Course course) {
+//        long totalMinutes = 0;
+//        if (startDateTime.toLocalDate().equals(endDateTime.toLocalDate())) {
+//            // Same day work
+//            totalMinutes = saveTimeEntry(startDateTime, endDateTime, user, course);
+//        } else {
+//            // Spread across multiple days
+//            LocalDateTime endOfDay = startDateTime.toLocalDate().atTime(LocalTime.MAX);
+//            totalMinutes += saveTimeEntry(startDateTime, endOfDay, user, course);
+//
+//            LocalDateTime startOfNextDay = endDateTime.toLocalDate().atStartOfDay();
+//            totalMinutes += saveTimeEntry(startOfNextDay, endDateTime, user, course);
+//        }
+//        return totalMinutes;
+//    }
 
-            LocalDateTime startOfNextDay = endDateTime.toLocalDate().atStartOfDay();
-            totalMinutes += saveTimeEntry(startOfNextDay, endDateTime, user, course);
+    private TimeEntry calculateAndSaveTimeEntries(LocalDateTime startDateTime, LocalDateTime endDateTime, User user, Course course) {
+
+        TimeEntry timeEntry;
+        if (startDateTime.toLocalDate().equals(endDateTime.toLocalDate())) {
+            // Aynı gün çalışma
+            timeEntry = saveTimeEntry(startDateTime, endDateTime, user, course);
+        } else {
+            // Birden fazla güne yayılmış çalışma
+            // Günü saat 23:59:59'da bitirmek yerine 00:00:00'da başlat
+            LocalDateTime endOfDay = startDateTime.toLocalDate().atTime(23, 59, 59);
+            timeEntry = saveTimeEntry(startDateTime, endOfDay, user, course);
+
+            // Günler arasında tüm günü doldurmak için saat 00:00:00'dan itibaren başlat
+            LocalDate nextDay = startDateTime.toLocalDate().plusDays(1);
+            while (nextDay.isBefore(endDateTime.toLocalDate())) {
+                timeEntry = saveTimeEntry(nextDay.atStartOfDay(), nextDay.atTime(23, 59, 59), user, course);
+                nextDay = nextDay.plusDays(1);
+            }
+
+            // Son günü doldur
+            LocalDateTime startOfLastDay = endDateTime.toLocalDate().atStartOfDay();
+            timeEntry = saveTimeEntry(startOfLastDay, endDateTime, user, course);
         }
-        return totalMinutes;
+        return timeEntry;
     }
 
+
     // Updated to return the duration in minutes
-    private long saveTimeEntry(LocalDateTime startDateTime, LocalDateTime endDateTime, User user, Course course) {
+    private TimeEntry saveTimeEntry(LocalDateTime startDateTime, LocalDateTime endDateTime, User user, Course course) {
         Duration duration = Duration.between(startDateTime, endDateTime);
         long durationInMinutes = duration.toMinutes();
 
@@ -109,7 +137,7 @@ public class TimeEntryService {
 
         timeEntryRepository.save(timeEntry);
 
-        return durationInMinutes;
+        return timeEntry;
     }
 
     public ResponseMessage<List<TimeResponse>> getDailyTimeEntriesByUser(HttpServletRequest request) {
@@ -254,7 +282,7 @@ public class TimeEntryService {
                 existingResponse.setTotalMinutesWorked(updatedTotalMinutes);
             } else {
                 // Otherwise, add a new entry to the map
-                TimeResponse timeResponse = new TimeResponse(courseId, courseName, durationInMinutes);
+                TimeResponse timeResponse = new TimeResponse(timeEntry.getTimeEntryId(), courseId, courseName, durationInMinutes, timeEntry.getStartDateTime());
                 courseTimeMap.put(courseId, timeResponse);
             }
         }
@@ -278,9 +306,11 @@ public class TimeEntryService {
 
         List<TimeResponse> timeResponses = timeEntryList.stream()
                 .map(timeEntry -> new TimeResponse(
+                        timeEntry.getTimeEntryId(),
                         timeEntry.getCourse().getCourseId(),
                         timeEntry.getCourse().getCourseName(),
-                        timeEntry.getDurationInMinutes()))
+                        timeEntry.getDurationInMinutes(),
+                        timeEntry.getStartDateTime()))
                 .toList();
 
         return ResponseMessage.<List<TimeResponse>>builder().message
@@ -317,6 +347,7 @@ public class TimeEntryService {
             timeEntryToUpdate.setEndDateTime(endDateTime);
             timeEntryToUpdate.setDurationInMinutes(durationInMinutes);
             totalMinutes = durationInMinutes;
+            timeEntryRepository.save(timeEntryToUpdate);
         } else {
             // Handle multiple days
             LocalDateTime endOfDay = startDateTime.toLocalDate().atTime(LocalTime.MAX);
