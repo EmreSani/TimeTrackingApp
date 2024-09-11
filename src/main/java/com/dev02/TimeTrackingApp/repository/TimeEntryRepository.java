@@ -16,4 +16,6 @@ public interface TimeEntryRepository extends JpaRepository<TimeEntry, Long> {
 
 
     List<TimeEntry> findByUserAndCourseAndStartDateTimeBetween(User user, Course course, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    List<TimeEntry> findByUser(User user);
 }

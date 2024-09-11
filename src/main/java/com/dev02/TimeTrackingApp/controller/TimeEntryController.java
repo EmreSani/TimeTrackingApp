@@ -26,7 +26,6 @@ public class TimeEntryController {
     , HttpServletRequest httpRequest){
         return timeEntryService.addNewTimeEntry(timeEntryRequest, httpRequest);
     }
-    //todo: farklı dersleri aynı saatte çalışabiliyoruz, bunun önlenmesi lazım.
 
     @GetMapping("/getAllDailyTimeEntriesByUser")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")

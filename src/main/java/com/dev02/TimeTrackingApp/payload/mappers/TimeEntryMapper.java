@@ -9,8 +9,7 @@ public class TimeEntryMapper {
 
     public TimeResponse mapTimeEntryToTimeResponse(TimeEntry timeEntry, Long totalMinutes){
 
-      return  TimeResponse.builder().endDateTime(timeEntry.getEndDateTime())
-              .startDateTime(timeEntry.getStartDateTime())
+      return  TimeResponse.builder()
               .courseName(timeEntry.getCourse().getCourseName())
               .courseId(timeEntry.getCourse().getCourseId())
               .totalMinutesWorked(totalMinutes).build();
