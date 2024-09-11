@@ -14,4 +14,6 @@ import org.springframework.context.annotation.Configuration;
 public class OpenAPIConfig {
 
     // !!! http://localhost:8080/swagger-ui/index.html   --> SWAGGER API erisim adresi
+    //
+    //11,09
 }
