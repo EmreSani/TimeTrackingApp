@@ -2,6 +2,8 @@ package com.dev02.TimeTrackingApp.payload.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -10,8 +12,10 @@ import lombok.*;
 @Builder
 public class TimeResponse {
 
+    private Long timeEntryId;
     private Long courseId;
     private String courseName;
     private long totalMinutesWorked;
+    private LocalDateTime startDateTime;
 
 }
