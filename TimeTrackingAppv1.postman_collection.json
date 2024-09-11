@@ -1,0 +1,527 @@
+{
+	"info": {
+		"_postman_id": "bcfdd609-97ed-431e-8c6f-94c744b0c094",
+		"name": "TimeTrackingApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28010884"
+	},
+	"item": [
+		{
+			"name": "CourseController",
+			"item": [
+				{
+					"name": "createCourse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huZG9lQGV4YW1wbGUuY29tIiwiaWF0IjoxNzI1OTcwOTQ4LCJleHAiOjE3MjU5Nzk1ODh9.Wj8xAkNeujupvYKXuLsk4XL9nJHoCF-aSwCDkALb_Qz7hMsk5XM5oJYC3ssbQij0xKnP8GW-GlCs5aNSr1OUyw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"courseName\": \"Introduction to Java\",\n  \"description\": \"A beginner course for Java programming\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/course/save/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"save",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllCoursesByUser",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCourse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNTk3MzQ0NCwiZXhwIjoxNzI1OTgyMDg0fQ.sVxjXGHO4iaHkEPlUvIIL5tROfAeW2TS9Qi6bOi2papchgE5vfMMVAJjzt5VDuBbN_MzDsg4yPP6jLJZtHUdtg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/course/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCourse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNTk3MzQ0NCwiZXhwIjoxNzI1OTgyMDg0fQ.sVxjXGHO4iaHkEPlUvIIL5tROfAeW2TS9Qi6bOi2papchgE5vfMMVAJjzt5VDuBbN_MzDsg4yPP6jLJZtHUdtg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"courseName\": \"Introduction to Java UPDATED\",\n  \"description\": \"A beginner course for Java programming UPDATED\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/course/updateCourse/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"updateCourse",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TimeEntryController",
+			"item": [
+				{
+					"name": "addTimeEntry",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"courseId\": 1,\n  \"startDateTime\": \"2024-08-19T12:30:00\",\n  \"endDateTime\": \"2024-08-19T10:30:00\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/save",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDailyToday",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/getAllDailyTimeEntriesByUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"getAllDailyTimeEntriesByUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getWeekly",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/getAllWeeklyTimeEntriesByUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"getAllWeeklyTimeEntriesByUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMonthly",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/getAllMonthlyTimeEntriesByUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"getAllMonthlyTimeEntriesByUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPreviousDay",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/getAllPreviousDayTimeEntriesByUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"getAllPreviousDayTimeEntriesByUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPreviousWeek",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/getAllPreviousWeekTimeEntriesByUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"getAllPreviousWeekTimeEntriesByUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPreviousMonth",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/getAllPreviousMonthTimeEntriesByUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"getAllPreviousMonthTimeEntriesByUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllEntriesByUser",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTimeEntry",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/deleteTimeEntry/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"deleteTimeEntry",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTimeEntry",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTcyNjA0NjEwMiwiZXhwIjoxNzI2MDU0NzQyfQ.yUNukuhlZVUDihRviDA2LkJiwtTHdQaOC2N6tvb2Nj9YtVqRoUbOT-hpZFFKviqyBxdraJuLaEt0KtEMoeVRfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"courseId\": 2,\n  \"startDateTime\": \"2024-09-11T10:30:00\",\n  \"endDateTime\": \"2024-09-11T12:30:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/timeEntry/updateTimeEntry/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeEntry",
+								"updateTimeEntry",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserController",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"janesmithUpdated1@example.com\",\n  \"password\": \"yourPassword\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phoneNumber\": \"123-456-7890\",\n  \"username\": \"johndoe@example.com\",\n  \"email\": \"johndoe@example.com\",\n  \"password\": \"securePassword123\",\n  \"ssn\": \"123-45-6789\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AdminLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
