@@ -13,6 +13,7 @@ import com.dev02.TimeTrackingApp.payload.response.ResponseMessage;
 import com.dev02.TimeTrackingApp.payload.response.TimeResponse;
 import com.dev02.TimeTrackingApp.repository.TimeEntryRepository;
 import com.dev02.TimeTrackingApp.service.helper.MethodHelper;
+import com.dev02.TimeTrackingApp.service.validator.TimeEntryValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class TimeEntryService {
     private final TimeEntryRepository timeEntryRepository;
     private final MethodHelper methodHelper;
     private final TimeEntryMapper timeEntryMapper;
+    private final TimeEntryValidator timeEntryValidator;
 
     // Updated method to return TimeResponse
     //todo: mapper ile yapmayı düşün.
@@ -47,35 +49,20 @@ public class TimeEntryService {
         LocalDateTime startDateTime = timeEntryRequest.getStartDateTime();
         LocalDateTime endDateTime = timeEntryRequest.getEndDateTime();
 
-        // Aynı zaman aralığında birden fazla giriş olup olmadığını kontrol et
-        if (isOverlappingTimeEntry(user, course, startDateTime, endDateTime)) {
-            return ResponseMessage.<TimeResponse>builder()
-                    .message("Time entry overlaps with an existing entry.")
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+        // TimeValidator ile zaman çakışmalarını kontrol et
+        timeEntryValidator.validateTimeEntry(user, startDateTime, endDateTime);
 
-        // Calculate and save time entries
+        // Zaman çakışması yoksa kaydı oluştur
         long totalMinutes = calculateAndSaveTimeEntries(startDateTime, endDateTime, user, course);
 
         // Check if the course has overlapping entries
         long totalMinutesForCourse = calculateTotalMinutesForCourse(course, user, startDateTime.toLocalDate(), endDateTime.toLocalDate());
 
-//        // Create TimeResponse
-//        TimeResponse timeResponse = new TimeResponse(
-//                course.getCourseId(),
-//                course.getCourseName(),
-//                totalMinutes,
-//                startDateTime,
-//                endDateTime
-//        );
         // Create TimeResponse
         TimeResponse timeResponse = new TimeResponse(
                 course.getCourseId(),
                 course.getCourseName(),
-                totalMinutesForCourse,
-                startDateTime,
-                endDateTime
+                totalMinutesForCourse
         );
 
         return ResponseMessage.<TimeResponse>builder().message(SuccessMessages.TIME_ADDED)
@@ -83,17 +70,12 @@ public class TimeEntryService {
                 .object(timeResponse).build();
     }
 
+
     private long calculateTotalMinutesForCourse(Course course, User user, LocalDate startDate, LocalDate endDate) {
         List<TimeEntry> entries = timeEntryRepository.findByUserAndCourseAndStartDateTimeBetween(user, course, startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
         return entries.stream()
                 .mapToLong(TimeEntry::getDurationInMinutes)
                 .sum();
-    }
-
-    private boolean isOverlappingTimeEntry(User user, Course course, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        List<TimeEntry> existingEntries = timeEntryRepository.findByUserAndCourseAndStartDateTimeBetween(user, course, startDateTime, endDateTime);
-
-        return !existingEntries.isEmpty();
     }
 
     // Updated to return total minutes worked
@@ -272,12 +254,10 @@ public class TimeEntryService {
                 existingResponse.setTotalMinutesWorked(updatedTotalMinutes);
             } else {
                 // Otherwise, add a new entry to the map
-                TimeResponse timeResponse = new TimeResponse(courseId, courseName, durationInMinutes, timeEntry.getStartDateTime(), timeEntry.getEndDateTime());
+                TimeResponse timeResponse = new TimeResponse(courseId, courseName, durationInMinutes);
                 courseTimeMap.put(courseId, timeResponse);
             }
         }
-        //todo: time response döndürürken saat aralığını doğru dönmüyor, birden çok saat aralığı varsa onları postmande düzgünce göremiyoruz.
-        //todo: belki time responseda saat aralığını iptal edebiliriz.
 
         // Convert the map values to a list
         List<TimeResponse> timeResponses = new ArrayList<>(courseTimeMap.values());
@@ -300,9 +280,7 @@ public class TimeEntryService {
                 .map(timeEntry -> new TimeResponse(
                         timeEntry.getCourse().getCourseId(),
                         timeEntry.getCourse().getCourseName(),
-                        timeEntry.getDurationInMinutes(),
-                        timeEntry.getStartDateTime(),
-                        timeEntry.getEndDateTime()))
+                        timeEntry.getDurationInMinutes()))
                 .toList();
 
         return ResponseMessage.<List<TimeResponse>>builder().message

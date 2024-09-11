@@ -25,5 +25,7 @@ public class ErrorMessages {
 
 
     public static final String NOT_PERMITTED_TO_DELETE_TIME_ENTRY = "You do not have any permission to delete this time entry";
+    public static final String TIME_OVERLAPS = "Time entry overlaps with an existing entry";
+    public static final String START_OR_END_TIME_CONFLICT = "Invalid time entry: Start time cannot be after or equal to end time.";
 
 }
