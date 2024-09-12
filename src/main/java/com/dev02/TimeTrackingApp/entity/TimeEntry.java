@@ -19,10 +19,10 @@ public class TimeEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long timeEntryId;
 
-    @ManyToOne
+    @ManyToOne//todo: json ignore
     private User user;
 
-    @ManyToOne
+    @ManyToOne//todo: json ignore
     private Course course;
 
 
