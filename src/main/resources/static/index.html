@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+
+    <title>DEV_02 Time tracking dashboard</title>
+    <style>
+      .attribution {
+        font-size: 11px;
+        text-align: center;
+      }
+      .attribution a {
+        color: hsl(228, 45%, 44%);
+      }
+    </style>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="wrapper">
+      <h1>Time tracking dashboard</h1>
+
+      
+      <article class="profile-card">
+        <h2>Profile</h2>
+        <div class="user-report border-radius">
+          <img
+            class="user-img"
+            src="images/image-dev02.png"
+            alt="user_avatar"/>
+          
+          
+            <div>
+            <span>Report for</span>
+            <p>Dev02 Team</p>
+            </div>
+
+        </div>
+
+        <div class="time-selection border-bot-radius height">
+          <button class="daily-para" type="button">Daily</button>
+          <button class="weekly-para active" type="button">Weekly</button>
+          <button class="monthly-para" type="button">Monthly</button>
+        </div>
+      </article>
+
+      <article class="theme-card">
+        <h2>JAVA</h2>
+        <div class="icon-box border-top-radius">
+          <img class="logo-card" src="images/icon-java.svg" alt="" height="40px"/>
+        </div>
+        <img
+          class="icon-ellipsis card-work"
+          src="images/icon-ellipsis.svg"
+          alt=""
+        />
+        <div class="data-card border-radius">
+          <p class="card-title">JAVA</p>
+          <div class="card-info">
+            <p class="para-current">
+              32hrs
+              <!-- weekly -->
+            </p>
+            <span class="span-previous"
+              >Last Week - 36hrs
+              <!-- weekly --></span
+            >
+          </div>
+        </div>
+        <div class="theme-card-info card-1 border-bot-radius hidden">
+          <ul class="theme-card-list">
+            <li>Rename</li>
+            <li>Save as PDF</li>
+            <li>Delete</li>
+          </ul>
+        </div>
+      </article>
+      
+      <article class="theme-card">
+        <h2>Spring Boot</h2>
+        <div
+          class="icon-box border-top-radius"
+          style="background-color: var(--soft-blue)"
+        >
+          <img class="logo-card" src="images/icon-spring.svg" alt="" height="35px"/>
+        </div>
+        <img
+          class="icon-ellipsis card-play"
+          src="images/icon-ellipsis.svg"
+          alt=""
+        />
+        <div class="data-card border-radius">
+          <p class="card-title">Spring Boot</p>
+          <div class="card-info">
+            <p class="para-current">
+              10hrs
+              <!-- weekly -->
+            </p>
+            <span class="span-previous"
+              >Last Week - 8hrs
+              <!-- weekly --></span
+            >
+          </div>
+        </div>
+        <div class="theme-card-info card-2 border-bot-radius hidden">
+          <ul class="theme-card-list">
+            <li>Rename</li>
+            <li>Save as PDF</li>
+            <li>Delete</li>
+          </ul>
+        </div>
+      </article>
+      <article class="theme-card">
+        <h2>React</h2>
+        <div
+          class="icon-box border-top-radius"
+          style="background-color: var(--study-red)"
+        >
+          <img class="logo-card" src="images/icon-react.svg" alt="" height="35px"/>
+        </div>
+        <img
+          class="icon-ellipsis card-study"
+          src="images/icon-ellipsis.svg"
+          alt=""
+        />
+        <div class="data-card border-radius">
+          <p class="card-title">React JS</p>
+          <div class="card-info">
+            <p class="para-current">
+              4hrs
+              <!-- weekly -->
+            </p>
+            <span class="span-previous"
+              >Last Week - 7hrs
+              <!-- weekly --></span
+            >
+          </div>
+        </div>
+        <div class="theme-card-info card-3 border-bot-radius hidden">
+          <ul class="theme-card-list">
+            <li>Rename</li>
+            <li>Save as PDF</li>
+            <li>Delete</li>
+          </ul>
+        </div>
+      </article>
+      <article class="theme-card">
+        <h2>SQL</h2>
+        <div
+          class="icon-box border-top-radius"
+          style="background-color: var(--green-exercise)"
+        >
+          <img class="logo-card" src="images/icon-sql.svg" alt="" height="35px"/>
+        </div>
+        <img
+          class="icon-ellipsis card-exercise"
+          src="images/icon-ellipsis.svg"
+          alt=""
+        />
+        <div class="data-card border-radius">
+          <p class="card-title">SQL</p>
+          <div class="card-info">
+            <p class="para-current">
+              4hrs
+              <!-- weekly -->
+            </p>
+            <span class="span-previous"
+              >Last Week - 5hrs
+              <!-- weekly --></span
+            >
+          </div>
+        </div>
+        <div class="theme-card-info card-4 border-bot-radius hidden">
+          <ul class="theme-card-list">
+            <li>Rename</li>
+            <li>Save as PDF</li>
+            <li>Delete</li>
+          </ul>
+        </div>
+      </article>
+      <article class="theme-card">
+        <h2>BootStrap</h2>
+        <div
+          class="icon-box border-top-radius"
+          style="background-color: var(--violet-social)"
+        >
+          <img class="logo-card" src="images/icon-bootstrap.svg" alt="" height="35px"/>
+        </div>
+        <img
+          class="icon-ellipsis card-social"
+          src="images/icon-ellipsis.svg"
+          alt=""
+        />
+        <div class="data-card border-radius">
+          <p class="card-title">Bootstrap</p>
+          <div class="card-info">
+            <p class="para-current">
+              5hrs
+              <!-- weekly -->
+            </p>
+            <span class="span-previous"
+              >Last Week - 10hrs
+              <!-- weekly --></span
+            >
+          </div>
+        </div>
+        <div class="theme-card-info card-5 border-bot-radius hidden">
+          <ul class="theme-card-list">
+            <li>Rename</li>
+            <li>Save as PDF</li>
+            <li>Delete</li>
+          </ul>
+        </div>
+      </article>
+      <article class="theme-card">
+        <h2>JavaScript</h2>
+        <div
+          class="icon-box border-top-radius"
+          style="background-color: var(--orange-self)"
+        >
+          <img class="logo-card" src="images/icon-js.svg" alt="" height="35px"/>
+        </div>
+        <img
+          class="icon-ellipsis card-self-care"
+          src="images/icon-ellipsis.svg"
+          alt=""
+        />
+        <div class="data-card border-radius">
+          <p class="card-title">JavaScript</p>
+          <div class="card-info">
+            <p class="para-current">
+              2hrs
+              <!-- weekly -->
+            </p>
+            <span class="span-previous"
+              >Last Week - 2hrs
+              <!-- weekly --></span
+            >
+          </div>
+        </div>
+        <div class="theme-card-info card-6 border-bot-radius hidden">
+          <ul class="theme-card-list">
+            <li>Rename</li>
+            <li>Save as PDF</li>
+            <li>Delete</li>
+          </ul>
+        </div>
+      </article>
+    </main>
+
+    <footer class="attribution">
+      Designed by
+      <a href="#" target="_blank"
+        >DEV_02</a
+      >. Coded by <a href="#">DEV_02</a>.
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
