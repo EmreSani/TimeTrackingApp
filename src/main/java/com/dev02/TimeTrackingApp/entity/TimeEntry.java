@@ -1,6 +1,7 @@
 package com.dev02.TimeTrackingApp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,11 @@ public class TimeEntry {
     private Long timeEntryId;
 
     @ManyToOne//todo: json ignore
+    @JsonIgnore
     private User user;
 
     @ManyToOne//todo: json ignore
+    @JsonIgnore
     private Course course;
 
 
