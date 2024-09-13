@@ -72,21 +72,14 @@ public class WebSecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-
-                // uygulamamıza gelen her isteğe bu ayarlar uygulanır.
                 registry.addMapping("/**")
-                        // tüm kaynaklara (farklı sunuculara veya domainlere) isteğe
-                        // izin verildiğini belirtir. Yani, başka bir sunucudan gelen
-                        // isteklere izin verilir.
                         .allowedOrigins("*")
-                        // gelen isteklerdeki başlıklar (örneğin, Authorization
-                        // veya Content-Type) herhangi bir sınırlama olmadan kabul edilir.
                         .allowedHeaders("*")
-                        // tüm HTTP metotlarına (GET, POST, PUT, DELETE vb.) isteğe izin verilir.
                         .allowedMethods("*");
             }
         };
     }
+
 
 
     private static final String[] AUTH_WHITE_LIST = {
