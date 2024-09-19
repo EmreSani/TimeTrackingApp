@@ -77,6 +77,7 @@ const Weekly = () => {
               backgroundColor={color}
               iconSrc="images/icon-placeholder.svg" // İkonun gerçek yolunu belirleyin
               cardClass="default" // Kart sınıfını uygun şekilde ayarlayın
+              state="Last Week"
             />
           ))
         ) : (

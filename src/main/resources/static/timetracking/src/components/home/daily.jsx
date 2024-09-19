@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import ProfileCard from '../profilecard';
 import ThemeCard from '../themecard';
 import { fetchCourses } from '../../api/fetchCourse'; // API işlevini içe aktarın
-import { fetchPreviousWeekTimeEntries } from '../../api/fetchpreviousweektime'; // API işlevini içe aktarın
+import { fetchPreviousDayTimeEntries } from '../../api/fetchpreviousdaytime'; // API işlevini içe aktarın
 import { useAuth } from '../../api/useAuth'; // Kullanıcı doğrulama hook'u, auth token'ını almak için
 import { getRandomColor } from '../../api/getrandomcolor';
 
 const Daily = () => {
   const [courses, setCourses] = useState([]);
-  const [previousWeekEntries, setPreviousWeekEntries] = useState([]);
+  const [previousDayEntries, setPreviousDayEntries] = useState([]);
   const [error, setError] = useState(null);
   const { token } = useAuth(); // Hook'tan token alın
   const color = getRandomColor(); // Arka plan rengi
@@ -33,32 +33,32 @@ const Daily = () => {
       }
     };
 
-    const getPreviousWeekEntries = async () => {
+    const getPreviousDayEntries = async () => {
       try {
         if (token) {
-          const urlPrev = 'http://localhost:8080/timeEntry/getAllPreviousWeekTimeEntriesByUser'; // Burada uygun API_URL'yi belirleyin
-          const data = await fetchPreviousWeekTimeEntries(token, urlPrev);
+          const urlPrev = 'http://localhost:8080/timeEntry/getAllPreviousDayTimeEntriesByUser'; 
+          const data = await fetchPreviousDayTimeEntries(token, urlPrev);
           
           if (Array.isArray(data)) {
-            setPreviousWeekEntries(data);
+            setPreviousDayEntries(data);
           } else {
-            setError('Unexpected data format received for previous week time entries');
+            setError('Unexpected data format received for previous day time entries');
           }
         } else {
           setError('No token available');
         }
       } catch (error) {
-        setError('Failed to load previous week time entries');
+        setError('Failed to load previous day time entries');
       }
     };
 
     getCourses();
-    getPreviousWeekEntries();
+    getPreviousDayEntries();
   }, [token]);
 
-  // `previousWeekEntries` ile `courses`'ı ilişkilendirin
+  // `previousDayEntries` ile `courses`'ı ilişkilendirin
   const getPreviousHours = (courseId) => {
-    const courseEntries = previousWeekEntries.filter(entry => entry.courseId === courseId);
+    const courseEntries = previousDayEntries.filter(entry => entry.courseId === courseId);
     return courseEntries.reduce((total, entry) => total + (entry.totalMinutesWorked / 60), 0); // Toplam saat
   };
 
@@ -77,6 +77,7 @@ const Daily = () => {
               backgroundColor={color}
               iconSrc="images/icon-placeholder.svg" // İkonun gerçek yolunu belirleyin
               cardClass="default" // Kart sınıfını uygun şekilde ayarlayın
+              state="Previous Day"
             />
           ))
         ) : (

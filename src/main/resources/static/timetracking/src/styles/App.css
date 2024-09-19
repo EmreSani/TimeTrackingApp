@@ -49,7 +49,8 @@ body {
   justify-content: center; /* Dikey eksende ortalar */
   min-height: 100vh; /* Tüm ekran yüksekliği kadar olmasını sağlar */
   padding: 0px; /* İsteğe bağlı: içeriğin kenarlardan uzak durmasını sağlar */
-  min-height: 100vh;
+  margin-top:-10px;
+
 }
 
 .profile-card {
@@ -322,7 +323,7 @@ header {
   height: 80px;
   position: relative;
   top: 0px;
-  left: -50px;
+  left: 0px;
 }
 
 .user-report {
@@ -408,6 +409,7 @@ header {
 .attribution {
   grid-column: 1 / 5;
   text-align: center;
+  margin-top:10px;
 }
 
 .upper-row {
@@ -476,7 +478,7 @@ nav ul {
 
 nav ul li {
   position: relative;
-  margin: 0 10px;
+  margin: 0 5px;
   width: 100px;
 }
 
@@ -490,6 +492,16 @@ nav a {
   background-color: rgba(255, 255, 255, 0.2); /* Hafif yarı saydam arka plan */
 }
 
+nav button{
+  color: white;
+  border: 1px;
+  border-radius: 15px;
+  background-color: rgba(107, 116, 240,1);
+  padding:10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 /* Alt Menü Stilleri */
 nav ul ul {
   display: none; /* Başlangıçta alt menüler gizlenir */
@@ -500,16 +512,21 @@ nav ul ul {
   border-radius: 8px;
   padding: 0;
   margin: 0;
-  width: 80%;
+  width: 40%;
+  max-width: 300px;
+  min-width: 100px;
   z-index: 1;
 }
 
 nav ul li:hover > ul {
   display: block; /* Ana menüye hover yapıldığında alt menüler görünür */
+  border:1px;
 }
 
 nav ul ul li {
-  margin: 0;
+  margin: 0px;
+  padding:0px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 nav ul ul a {
@@ -530,3 +547,4 @@ nav ul ul a:hover {
   min-height: 100vh;
   padding: 0;
 }
+

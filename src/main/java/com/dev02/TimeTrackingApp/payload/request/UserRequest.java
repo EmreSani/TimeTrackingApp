@@ -25,12 +25,11 @@ public class UserRequest {
     private String lastName;
 
     @NotNull
-    @Size(min = 12, max = 12, message = "Your phone number should be 12 characters long")
-    @Pattern(regexp = "^\\d{3}-\\d{3}-\\d{4}$", message = "Please enter a valid phone number in the format 999-999-9999")
+    //@Pattern(regexp = "^0 \\d{3} \\d{3} \\d{4}$", message = "Please enter a valid phone number in the format 999-999-9999")
     private String phoneNumber;
 
     @NotNull
-    @Size(min = 10, max = 80, message = "(${validatedValue}) {min} and {max} lengths allowed!")
+    @Size(min = 5, max = 20, message = "(${validatedValue}) {min} and {max} lengths allowed!")
     private String username;
 
     @NotNull
@@ -43,6 +42,6 @@ public class UserRequest {
 
     private String newPassword;
 
-    @NotNull
+
     private String ssn;
 }
