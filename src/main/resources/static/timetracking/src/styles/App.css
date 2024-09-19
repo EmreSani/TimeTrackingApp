@@ -18,6 +18,7 @@
   --dark-blue: hsl(235, 46%, 20%);
   --desat-blue: hsl(235, 45%, 61%);
   --pale-blue: hsl(236, 100%, 87%);
+  --fuchsia: hsla(321, 76%, 66%, 0.558);
 }
 
 * {
@@ -27,7 +28,7 @@
 }
 
 
-h1,h2 {
+h2 {
   display: none;
 }
 
@@ -41,7 +42,15 @@ body {
   font-size: 18px;
 }
 
-
+.app {
+  display: flex;
+  flex-direction: column; /* Yatay eksende (üstten aşağıya) yerleştirir */
+  align-items: center; /* Yatay eksende ortalar */
+  justify-content: center; /* Dikey eksende ortalar */
+  min-height: 100vh; /* Tüm ekran yüksekliği kadar olmasını sağlar */
+  padding: 0px; /* İsteğe bağlı: içeriğin kenarlardan uzak durmasını sağlar */
+  min-height: 100vh;
+}
 
 .profile-card {
   grid-column: 1 / 2; /* Sol tarafta tam bir sütunu kaplayacak */
@@ -205,6 +214,7 @@ button {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  
   font-size: 0.9em;
   padding: 10px 0px;
   color: white;
@@ -222,32 +232,41 @@ button {
   display: none;
 }
 
-.header{
-  align-items: center;
-  justify-content: center;
+header {  
+  background-color: var(--fuchsia);
+  color: white;
+  border-radius: 15px; /* Yuvarlatılmış köşeler */
+  padding: 15px;
+  margin: 10px;
+  display: flex;
+  justify-content: center; /* Ortalamak için */
+
+    align-items: center;
 }
+
 
 .wrapper {
   display: grid;
-  grid-template-columns: 225px;
+  grid-template-columns: 225px repeat(auto-fill, minmax(550px, 1fr));
   grid-template-rows: auto;
   column-gap: 10px;
   row-gap: 15px;
   width: auto;
-  margin: 10em auto;
+  margin: 1em auto;
   justify-content: center;
+  align-items: center;
 
 }
 
 .profile-card {
   grid-column: 1/1;
   grid-row: 1 / 1;
-  margin: unset;
+  margin: 0;
   height: 100%;
 }
 
 .theme-card {
-  margin: unset;
+  margin: 0;
   height: auto;
   width: 12.5em;
   grid-column: span 1;
@@ -258,19 +277,39 @@ button {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr)); /* Esnek sütunlar */
   gap: 15px;
+   justify-content: center;
+    align-items: center;
 }
 
 @media (max-width: 1024px) {
   .theme-card-container {
     grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 sütunlu grid */
     gap: 15px;
+    justify-content: center;
+    align-items: center;
+  }
+  nav ul {
+    width: 100%; /* Ekran genişliği 599px ve altı olduğunda genişlik %100 olacak */
+    max-width: 400px; /* Maksimum genişlik 200px olacak */
+    justify-content: center; /* Menü öğelerini ortalar */
   }
 }
 
 @media (max-width: 768px) {
+  .wrapper {
+    grid-template-columns: 230px  1fr;
+  }
   .theme-card-container {
     grid-template-columns: repeat(1, minmax(0, 1fr)); /* Tek sütunlu grid */
     gap: 5px;
+   
+     justify-content: center;
+    align-items: center;
+  }
+  nav ul {
+    width: 100%; /* Ekran genişliği 599px ve altı olduğunda genişlik %100 olacak */
+    max-width: 300px; /* Maksimum genişlik 200px olacak */
+    justify-content: center; /* Menü öğelerini ortalar */
   }
 }
 
@@ -412,4 +451,82 @@ button {
 
 .card a:hover {
   text-decoration: underline; /* Üzerine gelindiğinde alt çizgi */
+}
+
+
+
+nav {
+  display: flex; /* Ana menüleri yatay olarak hizalar */
+  justify-content: space-around; /* Menüler arasında eşit boşluk bırakır */
+  width: 100%;
+  
+}
+
+/* Menü Listesi Stilleri */
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  width: auto;
+  justify-content: space-between;  
+  max-width: 600px;
+  min-width: 300px;
+}
+
+nav ul li {
+  position: relative;
+  margin: 0 10px;
+  width: 100px;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.2em;
+  display: block;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.2); /* Hafif yarı saydam arka plan */
+}
+
+/* Alt Menü Stilleri */
+nav ul ul {
+  display: none; /* Başlangıçta alt menüler gizlenir */
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background-color: var(--fuchsia);
+  border-radius: 8px;
+  padding: 0;
+  margin: 0;
+  width: 80%;
+  z-index: 1;
+}
+
+nav ul li:hover > ul {
+  display: block; /* Ana menüye hover yapıldığında alt menüler görünür */
+}
+
+nav ul ul li {
+  margin: 0;
+}
+
+nav ul ul a {
+  font-size: 1em;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1); /* Alt menü arka planı */
+}
+
+nav ul ul a:hover {
+  background-color: rgba(255, 255, 255, 0.3); /* Alt menü öğesine hover efekti */
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Ortalamak için */
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0;
 }
