@@ -1,0 +1,73 @@
+/* loginstyle.css */
+
+:root {
+  /* Primary */
+
+  --blue: hsl(246, 80%, 60%);
+  --work-red: hsl(15, 100%, 70%);
+  --soft-blue: hsl(195, 74%, 62%);
+  --study-red: hsl(348, 100%, 68%);
+  --green-exercise: hsl(145, 58%, 55%);
+  --violet-social: hsl(264, 64%, 52%);
+  --orange-self: hsl(43, 84%, 65%);
+  --light-grey: hsl(250, 4%, 27%);
+
+  /* Neutral */
+
+  --very-dark-blue: hsl(226, 43%, 10%);
+  --dark-blue: hsl(235, 46%, 20%);
+  --desat-blue: hsl(235, 45%, 61%);
+  --pale-blue: hsl(236, 100%, 87%);
+  --fuchsia: hsla(321, 76%, 66%, 0.558);
+}
+
+.container {
+  margin-left: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Tüm ekranlarda tam yükseklik */
+  background: rgba(0, 0, 0, 0.5);/* Arka plan saydam */
+  padding: 20px; /* Ekranın kenarlarına yapışmasını önlemek için */
+  flex-direction: column;
+}
+
+.card {
+  background: --fuchsia/* Kartın saydam arka planı */
+  padding: 20px;
+  border-radius: 15px; /* Kenarları yuvarlatılmış */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Hafif gölge */
+  width: 300px;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.signin_btn {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--fuchsia);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.signin_btn:hover {
+  background-color: #c75716;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    margin-left: 0px;
+  }
+}

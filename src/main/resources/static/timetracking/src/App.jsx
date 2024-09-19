@@ -1,19 +1,34 @@
 import React from 'react';
-import {Header} from './components/header';
-import ProfileCard from './components/profilecard';
-import ThemeCard from './components/themecard';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { AuthProvider } from './api/AuthContext'; // AuthProvider'ı içe aktarın
+import Header from './components/header';
 import Footer from './components/footer';
-import './App.css';
+import Index from './components/index';
+import './styles/App.css';
 
 const App = () => {
   return (
-    
-    
-    
-    
+    <AuthProvider>
+      <Router>
+        <div className='app'>  
+          <Header/>  
+          <Index/>
+          <Footer/>
+        </div>
+      </Router>
+    </AuthProvider>
+  )
+ 
+};
+
+export default App;
+
+
+
+ {/*return (
     <main className="wrapper">  
     <Header/>  
-      <ProfileCard/>
+    <ProfileCard/>
       <div className="theme-card-container">
       <ThemeCard
         title="JAVA"
@@ -63,15 +78,9 @@ const App = () => {
         iconSrc="images/icon-bootstrap.svg"
         cardClass="social"
       />
-      
-      
-      </div>     
-      
+        </div>  
       <Footer />
       
     </main>
     
-  );
-};
-
-export default App;
+  );*/}
