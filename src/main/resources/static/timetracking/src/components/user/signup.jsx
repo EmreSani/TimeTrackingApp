@@ -95,15 +95,15 @@ const Signup = ({ onClose }) => {
             placeholder="SSN"
             value={formData.ssn}
             onChange={handleInputChange}
-            
+            //required
           />
           <input
             type="text"
             name="phoneNumber"
-            placeholder="Phone Number-0 555 555 5555"
+            placeholder="Phone Number->555-555-5555"
             value={formData.phoneNumber}
             onChange={handleInputChange}
-            required
+            //required
           />
           <input
             type="password"
