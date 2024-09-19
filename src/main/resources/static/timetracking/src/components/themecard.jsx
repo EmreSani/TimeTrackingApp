@@ -2,10 +2,13 @@ import React from 'react';
 import '../styles/App.css'; 
 import { getRandomColor} from '../api/getrandomcolor';
 
-const ThemeCard = ({ title, currentHours, previousHours, iconSrc, cardClass }) => {
+const ThemeCard = ({ title, currentHours, previousHours, iconSrc, cardClass,state }) => {
   const backgroundColor=getRandomColor();  
+  
+
 
   return (
+
     <article className={`theme-card ${cardClass}`}>
       <h2>{title}</h2>
       <div className="icon-box border-top-radius" style={{ backgroundColor }}>
@@ -21,7 +24,7 @@ const ThemeCard = ({ title, currentHours, previousHours, iconSrc, cardClass }) =
         <p className="card-title">{title}</p>
         <div className="card-info">
           <p className="para-current">{currentHours} hrs</p>
-          <span className="span-previous">Last Week - {previousHours} hrs</span>
+          <span className="span-previous">{state} - {previousHours} hrs</span>
         </div>
       </div>
       <div className={`theme-card-info card-${cardClass} border-bot-radius hidden`}>

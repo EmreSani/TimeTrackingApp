@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import ProfileCard from '../profilecard';
 import ThemeCard from '../themecard';
 import { fetchCourses } from '../../api/fetchCourse'; // API işlevini içe aktarın
-import { fetchPreviousWeekTimeEntries } from '../../api/fetchpreviousweektime'; // API işlevini içe aktarın
+import { fetchPreviousMonthTimeEntries } from '../../api/fetchpreviousmonthtime'; // API işlevini içe aktarın
 import { useAuth } from '../../api/useAuth'; // Kullanıcı doğrulama hook'u, auth token'ını almak için
 import { getRandomColor } from '../../api/getrandomcolor';
 
 const Monthly = () => {
   const [courses, setCourses] = useState([]);
-  const [previousWeekEntries, setPreviousWeekEntries] = useState([]);
+  const [previousMonthEntries, setPreviousMonthEntries] = useState([]);
   const [error, setError] = useState(null);
   const { token } = useAuth(); // Hook'tan token alın
   const color = getRandomColor(); // Arka plan rengi
+  
+  
 
   useEffect(() => {
     const getCourses = async () => {
@@ -33,32 +35,32 @@ const Monthly = () => {
       }
     };
 
-    const getPreviousWeekEntries = async () => {
+    const getPreviousMonthEntries = async () => {
       try {
         if (token) {
-          const urlPrev = 'http://localhost:8080/timeEntry/getAllPreviousWeekTimeEntriesByUser'; // Burada uygun API_URL'yi belirleyin
-          const data = await fetchPreviousWeekTimeEntries(token, urlPrev);
+          const urlPrev = 'http://localhost:8080/timeEntry/getAllPreviousMonthTimeEntriesByUser'; // Burada uygun API_URL'yi belirleyin
+          const data = await fetchPreviousMonthTimeEntries(token, urlPrev);
           
           if (Array.isArray(data)) {
-            setPreviousWeekEntries(data);
+            setPreviousMonthEntries(data);
           } else {
-            setError('Unexpected data format received for previous week time entries');
+            setError('Unexpected data format received for previous month time entries');
           }
         } else {
           setError('No token available');
         }
       } catch (error) {
-        setError('Failed to load previous week time entries');
+        setError('Failed to load previous month time entries');
       }
     };
 
     getCourses();
-    getPreviousWeekEntries();
+    getPreviousMonthEntries();
   }, [token]);
 
-  // `previousWeekEntries` ile `courses`'ı ilişkilendirin
+  // `previousMonthEntries` ile `courses`'ı ilişkilendirin
   const getPreviousHours = (courseId) => {
-    const courseEntries = previousWeekEntries.filter(entry => entry.courseId === courseId);
+    const courseEntries = previousMonthEntries.filter(entry => entry.courseId === courseId);
     return courseEntries.reduce((total, entry) => total + (entry.totalMinutesWorked / 60), 0); // Toplam saat
   };
 
@@ -77,6 +79,7 @@ const Monthly = () => {
               backgroundColor={color}
               iconSrc="images/icon-placeholder.svg" // İkonun gerçek yolunu belirleyin
               cardClass="default" // Kart sınıfını uygun şekilde ayarlayın
+              state="Last Month"
             />
           ))
         ) : (

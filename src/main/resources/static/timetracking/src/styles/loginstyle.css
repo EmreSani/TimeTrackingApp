@@ -66,6 +66,20 @@ input {
   background-color: #c75716;
 }
 
+.signup_btn {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--work-red);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.signup_btn:hover {
+  background-color: var(--orange-self);
+}
+
 @media screen and (max-width: 768px) {
   .container {
     margin-left: 0px;

@@ -1,96 +1,113 @@
+import React, { useState } from "react";
+import "./SignupCard.css"; // CSS'yi burada belirteceğiz
 
-import React, { useEffect, useState } from 'react';
-import ProfileCard from '../profilecard';
-import ThemeCard from '../themecard';
-import { fetchCourses } from '../../api/fetchCourse'; // API işlevini içe aktarın
-import { fetchPreviousWeekTimeEntries } from '../../api/fetchpreviousweektime'; // API işlevini içe aktarın
-import { useAuth } from '../../api/useAuth'; // Kullanıcı doğrulama hook'u, auth token'ını almak için
-import { getRandomColor } from '../../api/getrandomcolor';
+const signup = ({ onClose }) => {
+  const [formData, setFormData] = useState({
+    username: "",
+    firstName: "",
+    lastName: "",
+    ssn: "",
+    phoneNumber: "",
+    password: "",
+    email: "",
+  });
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
-const CreateCourse = () => {
-  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    try {
+      const response = await fetch("http://localhost:8080/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-const Weekly = () => {
-  const [courses, setCourses] = useState([]);
-  const [previousWeekEntries, setPreviousWeekEntries] = useState([]);
-  const [error, setError] = useState(null);
-  const { token } = useAuth(); // Hook'tan token alın
-  const color = getRandomColor(); // Arka plan rengi
-
-  useEffect(() => {
-    const getCourses = async () => {
-      try {
-        if (token) {
-          const url = 'http://localhost:8080/course/getAllUsersCourses'; // Burada uygun API_URL'yi belirleyin
-          const data = await fetchCourses(token, url);
-          
-          if (Array.isArray(data)) {
-            setCourses(data);
-          } else {
-            setError('Unexpected data format received for courses');
-          }
-        } else {
-          setError('No token available');
-        }
-      } catch (error) {
-        setError('Failed to load courses');
+      if (response.ok) {
+        console.log("User registered successfully!");
+      } else {
+        console.error("Error registering user.");
       }
-    };
-
-    const getPreviousWeekEntries = async () => {
-      try {
-        if (token) {
-          const urlPrev = 'http://localhost:8080/timeEntry/getAllPreviousWeekTimeEntriesByUser'; // Burada uygun API_URL'yi belirleyin
-          const data = await fetchPreviousWeekTimeEntries(token, urlPrev);
-          
-          if (Array.isArray(data)) {
-            setPreviousWeekEntries(data);
-          } else {
-            setError('Unexpected data format received for previous week time entries');
-          }
-        } else {
-          setError('No token available');
-        }
-      } catch (error) {
-        setError('Failed to load previous week time entries');
-      }
-    };
-
-    getCourses();
-    getPreviousWeekEntries();
-  }, [token]);
-
-  // `previousWeekEntries` ile `courses`'ı ilişkilendirin
-  const getPreviousHours = (courseId) => {
-    const courseEntries = previousWeekEntries.filter(entry => entry.courseId === courseId);
-    return courseEntries.reduce((total, entry) => total + (entry.totalMinutesWorked / 60), 0); // Toplam saat
+    } catch (error) {
+      console.error("Network error:", error);
+    }
   };
 
   return (
-    <div className="wrapper">
-      <ProfileCard />
-      <div className="theme-card-container">
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {courses.length > 0 ? (
-          courses.map(course => (
-            <ThemeCard
-              key={course.id} // courseId'yi kullanarak kartları ayırt edebilirsiniz
-              title={course.courseName}
-              currentHours={course.timeEntry?.reduce((total, entry) => total + (entry.weeklyHours || 0), 0) || 0}
-              previousHours={getPreviousHours(course.id)} // Önceki hafta saatler
-              backgroundColor={color}
-              iconSrc="images/icon-placeholder.svg" // İkonun gerçek yolunu belirleyin
-              cardClass="default" // Kart sınıfını uygun şekilde ayarlayın
-            />
-          ))
-        ) : (
-          <p>No courses available</p>
-        )}
+    <div className="signup-card-overlay">
+      <div className="signup-card">
+        <button className="close-button" onClick={onClose}>
+          X
+        </button>
+        <h2>Sign Up</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+            value={formData.firstName}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last Name"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="ssn"
+            placeholder="SSN"
+            value={formData.ssn}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="phoneNumber"
+            placeholder="Phone Number"
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
+          <button type="submit">Register</button>
+        </form>
       </div>
     </div>
   );
 };
 
-export default CreateCourse;
+export default SignupCard;

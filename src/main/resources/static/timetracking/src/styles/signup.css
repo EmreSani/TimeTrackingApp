@@ -1,0 +1,73 @@
+:root {
+    --blue: hsl(246, 80%, 60%);
+--work-red: hsl(15, 100%, 70%);
+--soft-blue: hsl(195, 74%, 62%);
+--study-red: hsl(348, 100%, 68%);
+--green-exercise: hsl(145, 58%, 55%);
+--violet-social: hsl(264, 64%, 52%);
+--orange-self: hsl(43, 84%, 65%);
+--light-grey: hsl(250, 4%, 27%);
+
+/* Neutral */
+
+--very-dark-blue: hsl(226, 43%, 10%);
+--dark-blue: hsl(235, 46%, 20%);
+--desat-blue: hsl(235, 45%, 61%);
+--pale-blue: hsl(236, 100%, 87%);
+--fuchsia: hsla(321, 76%, 66%, 0.558);
+}
+
+.signup-card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Yarı saydam arka plan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .signup-card {
+    background-color: rgba(255, 255, 255, 0.9); /* Yarı saydam beyaz */
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+  
+  .signup-card h2 {
+    margin-bottom: 20px;
+  }
+  
+  .signup-card input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  
+  
+  .signup-card button:hover {
+    background-color: var(--orange-self);
+  }
+  
+  
+  .button-reg{
+    font-size: 1.5em;
+    border-radius: 5px;
+    background-color: var(--fuchsia);
+    color: var(--fuchsia);
+    margin:1px;
+    border-bottom: 1px solid var(--light-grey);
+    cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    padding: 10px;
+  }
+  
