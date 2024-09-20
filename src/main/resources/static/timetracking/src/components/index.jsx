@@ -11,6 +11,7 @@ import Weekly from './home/weekly';
 import Daily from './home/daily';
 import Monthly from './home/monthly';
 import Signup from './user/signup';
+import UpdateUser from './user/update';
 
 
 
@@ -27,6 +28,7 @@ const Index = () => {
         <Route path="/home/daily" element={<Daily />} />
         <Route path="/home/monthly" element={<Monthly />} />
         <Route path="/user/signup" element={<Signup />} />
+        <Route path="/user/update" element={<UpdateUser />} />
         
 
         
