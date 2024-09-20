@@ -39,11 +39,23 @@
     position: relative;
   }
   
-  .signup-card h2 {
+  .signup-card p {
     margin-bottom: 20px;
+    color: var(--desat-blue);
+    font-size: 2.2em;
+    font-weight: 700;
+    
   }
   
   .signup-card input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .signup-card textarea {
     width: 100%;
     padding: 10px;
     margin: 10px 0;

@@ -21,6 +21,8 @@ public class CourseController {
 
     private final CourseService courseService;
 
+
+    // http://localhost:8080/course/save + POST
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseMessage<CourseResponse> createCourse(@RequestBody @Valid CourseRequest courseRequest, HttpServletRequest httpServletRequest){
@@ -48,6 +50,7 @@ public class CourseController {
         return courseService.getCoursesByUser(request);
     }
 
+    // http://localhost:8080/course/updateCourse/{courseId} + GET
     @PutMapping("/updateCourse/{courseId}")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseMessage<CourseResponse> updateCourseById(@PathVariable Long courseId,
