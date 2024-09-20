@@ -26,19 +26,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Tüm ekranlarda tam yükseklik */
+  min-height: 100vh;
   background: rgba(0, 0, 0, 0.5);/* Arka plan saydam */
-  padding: 20px; /* Ekranın kenarlarına yapışmasını önlemek için */
+  padding: 0px; /* Ekranın kenarlarına yapışmasını önlemek için */
   flex-direction: column;
 }
 
 .card {
-  background: --fuchsia/* Kartın saydam arka planı */
+  background: --fuchsia;/* Kartın saydam arka planı */
   padding: 20px;
   border-radius: 15px; /* Kenarları yuvarlatılmış */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Hafif gölge */
   width: 300px;
   text-align: center;
+  height: 300px;
 }
 
 .input-group {

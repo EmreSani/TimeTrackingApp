@@ -43,8 +43,9 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
-    // http://localhost:8080/user + POST
-    @PostMapping
+
+    // http://localhost:8080/user/userAuth + GET
+    @GetMapping("/userAuth")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseMessage<UserResponse> getAuthenticatedUser(HttpServletRequest httpServletRequest) {
         return userService.getAuthenticatedUser(httpServletRequest);

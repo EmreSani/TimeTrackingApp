@@ -253,6 +253,7 @@ header {
   column-gap: 10px;
   row-gap: 15px;
   width: auto;
+  height: 100vh;
   margin: 1em auto;
   justify-content: center;
   align-items: center;

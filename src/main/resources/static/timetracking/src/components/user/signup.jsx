@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import "../../styles/signup.css"; // CSS'yi burada belirteceğiz
+import { useNavigate } from 'react-router-dom';
+
 
 const Signup = ({ onClose }) => {
   const [error, setError] = useState("");
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     firstName: "",
@@ -44,8 +47,12 @@ const Signup = ({ onClose }) => {
           password: "",
           email: "",
         });
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+        
         // veya kapatma işlemi
-        onClose();
+        //onClose();
       } else {
         const errorData = await response.json();
         setError(`Error registering user: ${errorData.message || 'Unknown error'}`);
@@ -124,7 +131,7 @@ const Signup = ({ onClose }) => {
           
           <button className="button-reg" type="submit">Register</button>        
         </form>
-        <button className="button-reg" onClick={onClose}>
+        <button className="button-reg" onClick={() => navigate("/")}>
           X
         </button>
       </div>
