@@ -35,6 +35,7 @@ const Signup = ({ onClose }) => {
       });
   
       if (response.ok) {
+        alert("User registered successfully!");
         console.log("User registered successfully!");
         // Başarılı kayıt sonrası yapılacak işlemler
         // Formu sıfırla
@@ -49,7 +50,7 @@ const Signup = ({ onClose }) => {
         });
         setTimeout(() => {
           navigate("/");
-        }, 2000);
+        }, 1000);
         
         // veya kapatma işlemi
         //onClose();
@@ -66,10 +67,7 @@ const Signup = ({ onClose }) => {
   
 
   return (
-    
-    
       <div className="signup-card">
-        
         <h2>Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <input
