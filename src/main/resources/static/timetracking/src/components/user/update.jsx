@@ -15,7 +15,6 @@ const UpdateUser = () => {
     email: "",
   });
 
-  
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem('token'); // LocalStorage'dan token alınıyor
@@ -33,7 +32,7 @@ const UpdateUser = () => {
             "Authorization": `Bearer ${token}`, // Bearer token başlığını ekle
           },
         });
-  
+        
         if (response.ok) {
           const data = await response.json();
   
@@ -62,9 +61,7 @@ const UpdateUser = () => {
   
     fetchUserData();
   }, []);
-    
-
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -85,7 +82,6 @@ const UpdateUser = () => {
   
       if (response.ok) {
         console.log("User updated successfully!");
-        // Güncelleme sonrası yapılacak işlemler
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -101,6 +97,7 @@ const UpdateUser = () => {
   return (
     <div className="signup-card">
       <h2>Update User</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>} {/* Hata mesajı */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"

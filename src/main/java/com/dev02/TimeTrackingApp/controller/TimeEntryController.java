@@ -20,6 +20,7 @@ public class TimeEntryController {
 
     private final TimeEntryService timeEntryService;
 
+    //http://localhost:8080/timeEntry/save
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<TimeResponse> addNewTimeEntry(@RequestBody @Valid TimeEntryRequest timeEntryRequest
@@ -27,6 +28,7 @@ public class TimeEntryController {
         return timeEntryService.addNewTimeEntry(timeEntryRequest, httpRequest);
     }
 
+    //http://localhost:8080/timeEntry/getAllDailyTimeEntriesByUser
     @GetMapping("/getAllDailyTimeEntriesByUser")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllDailyTimeEntriesByUser(HttpServletRequest request){
