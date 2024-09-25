@@ -16,6 +16,7 @@ import CreateCourse from './course/create';
 import UpdateCourse from './course/update';
 import DeleteCourse from './course/delete';
 import AddTime from './time/add';
+import DeleteTime from './time/delete';
 import GetAllTime from './time/getalltime';
 import SignOut from './user/signout';
 import UpdateTime from './time/update';
@@ -40,6 +41,7 @@ const Index = () => {
         <Route path="/course/update" element={<UpdateCourse />} />
         <Route path="/course/delete" element={<DeleteCourse />} />
         <Route path="/time/add" element={<AddTime />} />
+        <Route path="/time/delete" element={<DeleteTime />} />
         <Route path="/time/getalltime" element={<GetAllTime />} />
         <Route path="/user/signout" element={<SignOut />} />
         <Route path="/time/update" element={<UpdateTime />} />

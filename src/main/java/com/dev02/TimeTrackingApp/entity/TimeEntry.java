@@ -23,11 +23,11 @@ public class TimeEntry {
 
     @ManyToOne//todo: json ignore
     @JsonIgnore
-    //@JsonManagedReference
     private User user;
 
     @ManyToOne//todo: json ignore
     @JsonIgnore
+    //@JsonManagedReference
     private Course course;
 
 
@@ -35,14 +35,14 @@ public class TimeEntry {
 
     private Long durationInMinutes;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startDateTime;
 
     private double dailyHours; //35.5
     private double weeklyHours;
     private double monthlyHours;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDateTime;
 
 }

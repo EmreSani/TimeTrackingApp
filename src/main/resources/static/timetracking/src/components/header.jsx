@@ -46,6 +46,7 @@ const Header = () => {
                   <li><Link to="/time/add">Add Time</Link></li>
                   <li><Link to="/time/update">Update Time</Link></li>
                   <li><Link to="/time/getalltime">Get All Daily Time</Link></li>
+                  <li><Link to="/time/delete">Delete Time</Link></li>
                 </ul>
               )}
             </li>

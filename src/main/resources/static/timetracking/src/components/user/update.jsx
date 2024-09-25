@@ -82,6 +82,7 @@ const UpdateUser = () => {
   
       if (response.ok) {
         console.log("User updated successfully!");
+        alert("User updated successfully!");
         setTimeout(() => {
           navigate("/");
         }, 2000);
