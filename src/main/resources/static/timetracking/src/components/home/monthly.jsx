@@ -75,7 +75,7 @@ const Monthly = () => {
               key={course.id} 
               title={course.courseName}
               currentHours={course.timeEntry?.reduce((total, entry) => total + (entry.monthlyHours || 0), 0) || 0}
-              previousHours={getPreviousHours(course.id)} // Önceki hafta saatler
+              previousHours={getPreviousHours(course.id).toFixed(2)} // Önceki hafta saatler
               backgroundColor={color}
               iconSrc="images/icon-placeholder.svg" 
               cardClass="default" 

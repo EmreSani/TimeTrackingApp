@@ -119,7 +119,8 @@ const AddTimeEntry = () => {
           type="datetime-local"
           name="startDateTime"
           placeholder="Start DateTime"
-          value={formData.startDateTime}
+          
+          value={formData.startDateTime.slice(0, 16)}
           onChange={handleInputChange}
           required
         />
@@ -127,7 +128,8 @@ const AddTimeEntry = () => {
           type="datetime-local"
           name="endDateTime"
           placeholder="End DateTime"
-          value={formData.endDateTime}
+          value={formData.endDateTime.slice(0, 16)}
+          
           onChange={handleInputChange}
           required
         />

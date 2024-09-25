@@ -11,10 +11,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -76,7 +79,18 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseEntity<String>updateUser(@RequestBody @Valid
                                                 UserRequest userRequest,
-                                            HttpServletRequest request){
+                                            HttpServletRequest request,
+                                            BindingResult result){
+
+        if (result.hasErrors()) {
+            // Hataları bir listeye çevirip döndürelim
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(errors.toString());
+        }
+
         return userService.updateUserForUsers(userRequest, request) ;
     }
 

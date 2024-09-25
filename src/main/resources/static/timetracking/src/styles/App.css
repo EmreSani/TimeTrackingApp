@@ -46,10 +46,11 @@ body {
   display: flex;
   flex-direction: column; /* Yatay eksende (üstten aşağıya) yerleştirir */
   align-items: center; /* Yatay eksende ortalar */
-  justify-content: center; /* Dikey eksende ortalar */
+  justify-content:space-between; /* Dikey eksende ortalar */
   min-height: 100vh; /* Tüm ekran yüksekliği kadar olmasını sağlar */
-  padding: 0px; /* İsteğe bağlı: içeriğin kenarlardan uzak durmasını sağlar */
-  margin-top:-10px;
+  
+  
+  padding-bottom: 40px;
 
 }
 

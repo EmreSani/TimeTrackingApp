@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../styles/signup.css"; 
 import { useNavigate } from 'react-router-dom';
 
-const UpdateTime = () => {
+const DeleteTime = () => {
   const [timeEntries, setTimeEntries] = useState([]);
   const [selectedTimeEntryId, setSelectedTimeEntryId] = useState("");
   const [formData, setFormData] = useState({
@@ -141,8 +141,8 @@ const UpdateTime = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/timeEntry/updateTimeEntry/${selectedTimeEntryId}`, {
-        method: "PUT",
+      const response = await fetch(`http://localhost:8080/timeEntry/deleteTimeEntry/${selectedTimeEntryId}`, {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
@@ -155,8 +155,8 @@ const UpdateTime = () => {
       });
 
       if (response.ok) {
-        console.log("Time entry updated successfully!");
-        alert("Time entry updated successfully!");
+        alert("Time entry deleted successfully!");
+        console.log("Time entry deleted successfully!");
         setTimeout(() => {
           navigate("/home/daily");
         }, 2000);
@@ -171,7 +171,7 @@ const UpdateTime = () => {
 
   return (
     <div className="signup-card">
-      <h2>Update Time Entry</h2>
+      <h1>Delete Time Entry</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <select onChange={handleSelectChange} value={selectedTimeEntryId}>
@@ -184,24 +184,9 @@ const UpdateTime = () => {
       </select>
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="datetime-local"
-          name="startDateTime"
-          placeholder="Start Date Time"
-          value={formData.startDateTime}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="datetime-local"
-          name="endDateTime"
-          placeholder="End Date Time"
-          value={formData.endDateTime} 
-          onChange={handleInputChange}
-          required
-        />
+       
         
-        <button className="button-reg" type="submit">Update Time Entry</button>
+        <button className="button-reg" type="submit">Delete Time Entry</button>
       </form>
 
       <button className="button-reg" onClick={() => navigate("/home/daily")}>
@@ -211,4 +196,4 @@ const UpdateTime = () => {
   );
 };
 
-export default UpdateTime;
+export default DeleteTime;

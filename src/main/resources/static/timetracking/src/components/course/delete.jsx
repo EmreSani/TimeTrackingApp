@@ -71,6 +71,7 @@ const UpdateCourse = () => {
             courseName: courseData.courseName || "",
             description: courseData.description || "",
           });
+          
         } else {
           const errorData = await response.json();
           setError(`Error fetching course data: ${errorData.message || 'Unknown error'}`);
@@ -114,8 +115,8 @@ const UpdateCourse = () => {
       });
 
       if (response.ok) {
-        console.log("Course updated successfully!");
-        alert("Course updated successfully!");
+        console.log("Course deleted successfully!");
+        alert("Course deleted successfully!");
         setTimeout(() => {
           navigate("/home/weekly");
         }, 2000);
