@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/signup.css"; // CSS'yi burada belirteceğiz
+import "../../styles/signup.css"; 
 import { useNavigate } from 'react-router-dom';
 
 
@@ -23,7 +23,7 @@ const Signup = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Hata mesajını sıfırla
+    setError(""); 
   
     try {
       const response = await fetch("http://localhost:8080/user/register", {
@@ -37,8 +37,7 @@ const Signup = ({ onClose }) => {
       if (response.ok) {
         alert("User registered successfully!");
         console.log("User registered successfully!");
-        // Başarılı kayıt sonrası yapılacak işlemler
-        // Formu sıfırla
+        
         setFormData({
           username: "",
           firstName: "",
@@ -52,8 +51,7 @@ const Signup = ({ onClose }) => {
           navigate("/");
         }, 1000);
         
-        // veya kapatma işlemi
-        //onClose();
+        
       } else {
         const errorData = await response.json();
         setError(`Error registering user: ${errorData.message || 'Unknown error'}`);

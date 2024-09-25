@@ -13,6 +13,6 @@ public class TimeEntryMapper {
               .timeEntryId(timeEntry.getTimeEntryId())
               .courseName(timeEntry.getCourse().getCourseName())
               .courseId(timeEntry.getCourse().getCourseId())
-              .totalMinutesWorked(totalMinutes).startDateTime(timeEntry.getStartDateTime()).build();
+              .totalMinutesWorked(totalMinutes).startDateTime(timeEntry.getStartDateTime()).endDateTime(timeEntry.getEndDateTime()).build();
     }
 }

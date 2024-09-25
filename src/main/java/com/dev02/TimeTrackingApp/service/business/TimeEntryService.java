@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -63,7 +60,8 @@ public class TimeEntryService {
                 course.getCourseId(),
                 course.getCourseName(),
                 totalMinutesForCourse,
-                timeEntry.getStartDateTime()
+                timeEntry.getStartDateTime(),
+                timeEntry.getEndDateTime()
         );
 
         return ResponseMessage.<TimeResponse>builder().message(SuccessMessages.TIME_ADDED)
@@ -282,7 +280,7 @@ public class TimeEntryService {
                 existingResponse.setTotalMinutesWorked(updatedTotalMinutes);
             } else {
                 // Otherwise, add a new entry to the map
-                TimeResponse timeResponse = new TimeResponse(timeEntry.getTimeEntryId(), courseId, courseName, durationInMinutes, timeEntry.getStartDateTime());
+                TimeResponse timeResponse = new TimeResponse(timeEntry.getTimeEntryId(), courseId, courseName, durationInMinutes, timeEntry.getStartDateTime(),timeEntry.getEndDateTime());
                 courseTimeMap.put(courseId, timeResponse);
             }
         }
@@ -310,7 +308,9 @@ public class TimeEntryService {
                         timeEntry.getCourse().getCourseId(),
                         timeEntry.getCourse().getCourseName(),
                         timeEntry.getDurationInMinutes(),
-                        timeEntry.getStartDateTime()))
+                        timeEntry.getStartDateTime(),
+                        timeEntry.getEndDateTime()
+                        ))
                 .toList();
 
         return ResponseMessage.<List<TimeResponse>>builder().message
@@ -396,6 +396,25 @@ public class TimeEntryService {
                     .object(timeEntryMapper.mapTimeEntryToTimeResponse(timeEntryToDelete, timeEntryToDelete.getDurationInMinutes())).build();
         } else throw new BadRequestException(ErrorMessages.NOT_PERMITTED_TO_DELETE_TIME_ENTRY);
 
+    }
+
+    public ResponseMessage<TimeResponse> getTimeEntryById(Long id) {
+        Optional<TimeEntry> timeEntryOptional = timeEntryRepository.findById(id);
+        if (!timeEntryOptional.isPresent()) {
+            return ResponseMessage.<TimeResponse>builder()
+                    .message("Time entry not found")
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+        TimeEntry timeEntry = timeEntryOptional.get();
+        Long totalMinutes = timeEntry.getDurationInMinutes(); // Toplam dakikayı burada hesaplayabilirsiniz
+        TimeResponse timeResponse = timeEntryMapper.mapTimeEntryToTimeResponse(timeEntry, totalMinutes);
+
+        return ResponseMessage.<TimeResponse>builder()
+                .message("Success")
+                .httpStatus(HttpStatus.OK)
+                .object(timeResponse)
+                .build();
     }
 }
 

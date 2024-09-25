@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/signup.css"; // CSS'yi burada belirteceğiz
+import "../../styles/signup.css"; 
 import { useNavigate } from 'react-router-dom';
 
 const UpdateUser = () => {
@@ -17,7 +17,7 @@ const UpdateUser = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem('token'); // LocalStorage'dan token alınıyor
+      const token = localStorage.getItem('token'); 
   
       if (!token) {
         setError("No token found, please log in again.");
@@ -29,24 +29,24 @@ const UpdateUser = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, // Bearer token başlığını ekle
+            "Authorization": `Bearer ${token}`,
           },
         });
         
         if (response.ok) {
           const data = await response.json();
   
-          // Gelen veriler iç içe 'object' anahtarında olduğu için ona erişiyoruz
+          
           const userData = data.object;
   
-          // Gelen verileri form alanlarına yerleştir
+          
           setFormData({
             username: userData.username || "",
             firstName: userData.firstName || "",
             lastName: userData.lastName || "",
             ssn: userData.ssn || "",
             phoneNumber: userData.phone || "",
-            password: "", // Şifreyi boş bırakmak güvenlik açısından önemli
+            password: "", // Password alanını sıfırlama //güvenlik açısından şifreyi boş bıraktık
             email: userData.email || "",
           });
         } else {
@@ -69,7 +69,7 @@ const UpdateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Hata mesajını sıfırla
+    setError(""); 
   
     try {
       const response = await fetch("http://localhost:8080/user/updateUser", {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../../styles/loginstyle.css'; // CSS dosyasını dahil ediyoruz
+import '../../styles/loginstyle.css'; 
 
 const Signin = () => {
   const [username, setUsername] = useState('');
@@ -23,7 +23,7 @@ const Signin = () => {
       const response = await axios.post('http://localhost:8080/user/login', loginData);
 
       if (response.data && response.data.token) {
-        localStorage.setItem('token', response.data.token); // Token'ı localStorage'a kaydedin
+        localStorage.setItem('token', response.data.token); 
         sessionStorage.setItem('username', username);
         setMessage('Login Successful');
         navigate('/home/weekly');

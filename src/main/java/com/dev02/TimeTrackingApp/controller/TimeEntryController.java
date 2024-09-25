@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/timeEntry")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class TimeEntryController {
 
@@ -65,17 +66,20 @@ public class TimeEntryController {
         return timeEntryService.getPreviousMonthTimeEntriesByUser(request);
     }
 
+    //http://localhost:8080/timeEntry/allEntriesByUser
     @GetMapping("/allEntriesByUser")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseMessage<List<TimeResponse>> getAllTimeEntriesByUser(HttpServletRequest request){
         return timeEntryService.getAllTimeEntries(request);
     }
 
+    //http://localhost:8080/timeEntry/updateTimeEntry
     @PutMapping("/updateTimeEntry/{timeEntryId}")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseMessage<TimeResponse> updateTimeResponse(@RequestBody @Valid TimeEntryRequest timeEntryRequest,
                                                            @PathVariable Long timeEntryId,
                                                             HttpServletRequest request){
+
         return timeEntryService.updateTimeEntry(timeEntryRequest, timeEntryId, request);
     }
 
@@ -87,6 +91,12 @@ public class TimeEntryController {
 
         return timeEntryService.deleteTimeEntry(timeId, httpServletRequest);
 
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public ResponseMessage<TimeResponse> getTimeEntryById(@PathVariable Long id) {
+        return timeEntryService.getTimeEntryById(id);
     }
 
 

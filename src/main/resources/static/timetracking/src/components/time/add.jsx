@@ -46,7 +46,7 @@ const AddTimeEntry = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Eğer value'nun formatı "yyyy-MM-ddTHH:mm" şeklindeyse, sonuna ":00" ekleyelim
+    
     if (name === "startDateTime" || name === "endDateTime") {
       setFormData((prevData) => ({ 
         ...prevData, 
@@ -90,7 +90,7 @@ const AddTimeEntry = () => {
         alert("Time entry added successfully!");
         setFormData({ startDateTime: "", endDateTime: "" });
         setSelectedCourseId("");
-        // İsterseniz buraya yönlendirme ekleyebilirsiniz
+        
       } else {
         const errorData = await response.json();
         setError(`Error adding time entry: ${errorData.message || 'Unknown error'}`);

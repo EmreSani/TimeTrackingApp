@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/signup.css"; // CSS dosyasını burada belirtin
+import "../../styles/signup.css"; 
 import { useNavigate } from 'react-router-dom';
 
 const DailyTimeEntries = () => {
@@ -26,8 +26,8 @@ const DailyTimeEntries = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Fetched Data:", data.object); // Gelen veriyi kontrol edelim
-          setTimeEntries(data.object || []); // Gelen verileri state'e kaydedin
+          console.log("Fetched Data:", data.object); 
+          setTimeEntries(data.object || []); 
         } else {
           const errorData = await response.json();
           setError(`Error fetching time entries: ${errorData.message || 'Unknown error'}`);
@@ -40,10 +40,10 @@ const DailyTimeEntries = () => {
     fetchDailyTimeEntries();
   }, []);
 
-  // Bitiş zamanını hesaplayan fonksiyon
+  
   const calculateEndDateTime = (startDateTime, totalMinutesWorked) => {
     const start = new Date(startDateTime);
-    const end = new Date(start.getTime() + totalMinutesWorked * 60000); // totalMinutesWorked dakikaları milisaniyeye çevirerek ekliyoruz
+    const end = new Date(start.getTime() + totalMinutesWorked * 60000);
     return end;
   };
 
