@@ -17,5 +17,6 @@ public class TimeResponse {
     private String courseName;
     private long totalMinutesWorked;
     private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 
 }

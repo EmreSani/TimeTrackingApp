@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/signup.css";
+import "../../styles/signup.css"; 
 import { useNavigate } from 'react-router-dom';
 
-const AddTimeCard = () => {
+const UpdateCourse = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    startDateTime: "",
-    endDateTime: "",
+    courseName: "",
+    description: "",
   });
   const [courses, setCourses] = useState([]);
   const [selectedCourseId, setSelectedCourseId] = useState("");
 
+  
   useEffect(() => {
     const fetchCourses = async () => {
       const token = localStorage.getItem('token');
@@ -31,7 +32,7 @@ const AddTimeCard = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setCourses(data.object || []);
+          setCourses(data.object || []); 
         } else {
           const errorData = await response.json();
           setError(`Error fetching courses: ${errorData.message || 'Unknown error'}`);
@@ -44,13 +45,53 @@ const AddTimeCard = () => {
     fetchCourses();
   }, []);
 
+  
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      if (!selectedCourseId) return; 
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError("No token found, please log in again.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:8080/course/${selectedCourseId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const courseData = data.object || data;
+          setFormData({
+            courseName: courseData.courseName || "",
+            description: courseData.description || "",
+          });
+        } else {
+          const errorData = await response.json();
+          setError(`Error fetching course data: ${errorData.message || 'Unknown error'}`);
+        }
+      } catch (error) {
+        setError("Network error: " + error.message);
+      }
+    };
+
+    fetchCourseData();
+  }, [selectedCourseId]); 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSelectChange = (e) => {
-    setSelectedCourseId(e.target.value); // Update selected course ID
+    setSelectedCourseId(e.target.value); 
+    setFormData({ courseName: "", description: "" }); 
   };
 
   const handleSubmit = async (e) => {
@@ -64,33 +105,23 @@ const AddTimeCard = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/timeEntry/save", {
-        method: "POST",
+      const response = await fetch(`http://localhost:8080/course/updateCourse/${selectedCourseId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          courseId: selectedCourseId,
-          startDateTime: formData.startDateTime,
-          endDateTime: formData.endDateTime,
-        }),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        console.log("Time entry added successfully!");
-        alert("Time entry added successfully!");
-        setFormData({
-          startDateTime: "",
-          endDateTime: "",
-        });
-        setSelectedCourseId(""); // Reset the selected course
+        alert("Course updated successfully!");
         setTimeout(() => {
           navigate("/home/weekly");
-        }, 1000);
+        }, 2000);
       } else {
         const errorData = await response.json();
-        setError(`Error adding time entry: ${errorData.message || 'Unknown error'}`);
+        setError(`Error updating course: ${errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
       setError("Network error: " + error.message);
@@ -99,7 +130,7 @@ const AddTimeCard = () => {
 
   return (
     <div className="signup-card">
-      <p>Add Time Entry</p>
+      <h1>Update Course</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <select onChange={handleSelectChange} value={selectedCourseId}>
@@ -113,29 +144,28 @@ const AddTimeCard = () => {
 
       <form onSubmit={handleSubmit}>
         <input
-          type="datetime-local"
-          name="startDateTime"
-          placeholder="Start Date Time"
-          value={formData.startDateTime}
+          type="text"
+          name="courseName"
+          placeholder="Course Name"
+          value={formData.courseName}
           onChange={handleInputChange}
           required
         />
-        <input
-          type="datetime-local"
-          name="endDateTime"
-          placeholder="End Date Time"
-          value={formData.endDateTime}
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={formData.description}
           onChange={handleInputChange}
           required
         />
-        <button className="button-reg" type="submit">Add Time Entry</button>
+        <button className="button-reg" type="submit">Update Course</button>
       </form>
 
       <button className="button-reg" onClick={() => navigate("/home/weekly")}>
-        X
+        Cancel
       </button>
     </div>
   );
 };
 
-export default AddTimeCard;
+export default UpdateCourse;

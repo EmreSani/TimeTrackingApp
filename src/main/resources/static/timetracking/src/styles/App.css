@@ -248,12 +248,12 @@ header {
 
 .wrapper {
   display: grid;
-  grid-template-columns: 225px repeat(auto-fill, minmax(550px, 1fr));
+  grid-template-columns: 225px repeat(auto-fill, minmax(480px, 1fr));
   grid-template-rows: auto;
-  column-gap: 10px;
+  column-gap: 20px;
   row-gap: 15px;
   width: auto;
-  height: 100vh;
+  height: 500px;
   margin: 1em auto;
   justify-content: center;
   align-items: center;
@@ -294,6 +294,7 @@ header {
     width: 100%; /* Ekran genişliği 599px ve altı olduğunda genişlik %100 olacak */
     max-width: 400px; /* Maksimum genişlik 200px olacak */
     justify-content: center; /* Menü öğelerini ortalar */
+    align-items: center;
   }
 }
 
@@ -410,7 +411,8 @@ header {
 .attribution {
   grid-column: 1 / 5;
   text-align: center;
-  margin-top:10px;
+  margin-top:20px;
+  
 }
 
 .upper-row {

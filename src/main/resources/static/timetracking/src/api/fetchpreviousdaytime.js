@@ -13,7 +13,7 @@ export const fetchPreviousDayTimeEntries = async (token,url) => {
     
     console.log('API Response for Previous Day Time Entries:', response.data);
     
-    // `object` özelliği altında verileri döndürün
+  
     if (response.data && Array.isArray(response.data.object)) {
       return response.data.object;
     } else {

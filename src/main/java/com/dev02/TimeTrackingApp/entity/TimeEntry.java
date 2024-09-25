@@ -2,6 +2,7 @@ package com.dev02.TimeTrackingApp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class TimeEntry {
 
     @ManyToOne//todo: json ignore
     @JsonIgnore
+    //@JsonManagedReference
     private User user;
 
     @ManyToOne//todo: json ignore
@@ -33,14 +35,14 @@ public class TimeEntry {
 
     private Long durationInMinutes;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startDateTime;
 
     private double dailyHours; //35.5
     private double weeklyHours;
     private double monthlyHours;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endDateTime;
 
 }

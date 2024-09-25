@@ -1,20 +1,26 @@
-import axios from 'axios';
-
-//const API_URL = 'http://localhost:8080/course/getAllUsersCourses';
-
-export const fetchCourses = async (token,url) => {
+export const fetchCourses = async (token, url) => {
   try {
-    const response = await axios.get(url, {
+    const response = await fetch(url, {
+      method: 'GET',
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
     });
-    
-    console.log('API Response:', response.data);
-    
-    // `object` özelliği altında kursları döndürün
-    if (response.data && Array.isArray(response.data.object)) {
-      return response.data.object;
+
+    console.log('Response:', response);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    console.log('API Response:', data);
+
+  
+    if (data && Array.isArray(data.object)) {
+      return data.object;
     } else {
       throw new Error('Unexpected data format');
     }
@@ -23,4 +29,3 @@ export const fetchCourses = async (token,url) => {
     throw error;
   }
 };
-

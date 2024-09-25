@@ -13,7 +13,6 @@ export const fetchPreviousMonthTimeEntries = async (token,url) => {
     
     console.log('API Response for Previous Month Time Entries:', response.data);
     
-    // `object` özelliği altında verileri döndürün
     if (response.data && Array.isArray(response.data.object)) {
       return response.data.object;
     } else {

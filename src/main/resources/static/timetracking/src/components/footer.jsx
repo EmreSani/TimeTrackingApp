@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="attribution">
       <card className="card">Designed by 
-      <a href="#" target="_blank"> Dev_02 Team</a>. Coded by <a href="#">Dev_02 Team</a>.
+      <a href="#" target="_blank"> OSeyban</a>. Coded by <a href="#">OSeyban</a>.
       </card>
     </footer>
   );

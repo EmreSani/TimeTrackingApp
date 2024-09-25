@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import ProfileCard from '../profilecard';
 import ThemeCard from '../themecard';
-import { fetchCourses } from '../../api/fetchCourse'; // API işlevini içe aktarın
-import { fetchPreviousDayTimeEntries } from '../../api/fetchpreviousdaytime'; // API işlevini içe aktarın
-import { useAuth } from '../../api/useAuth'; // Kullanıcı doğrulama hook'u, auth token'ını almak için
+import { fetchCourses } from '../../api/fetchCourse'; 
+import { fetchPreviousDayTimeEntries } from '../../api/fetchpreviousdaytime'; 
+import { useAuth } from '../../api/useAuth'; 
 import { getRandomColor } from '../../api/getrandomcolor';
 
 const Daily = () => {
   const [courses, setCourses] = useState([]);
   const [previousDayEntries, setPreviousDayEntries] = useState([]);
   const [error, setError] = useState(null);
-  const { token } = useAuth(); // Hook'tan token alın
-  const color = getRandomColor(); // Arka plan rengi
+  const { token } = useAuth(); 
+  const color = getRandomColor(); 
 
   useEffect(() => {
     const getCourses = async () => {
       try {
         if (token) {
-          const url = 'http://localhost:8080/course/getAllUsersCourses'; // Burada uygun API_URL'yi belirleyin
+          const url = 'http://localhost:8080/course/getAllUsersCourses'; 
           const data = await fetchCourses(token, url);
           
           if (Array.isArray(data)) {
@@ -56,10 +56,10 @@ const Daily = () => {
     getPreviousDayEntries();
   }, [token]);
 
-  // `previousDayEntries` ile `courses`'ı ilişkilendirin
+  
   const getPreviousHours = (courseId) => {
     const courseEntries = previousDayEntries.filter(entry => entry.courseId === courseId);
-    return courseEntries.reduce((total, entry) => total + (entry.totalMinutesWorked / 60), 0); // Toplam saat
+    return courseEntries.reduce((total, entry) => total + (entry.totalMinutesWorked / 60), 0); 
   };
 
   return (
@@ -70,13 +70,13 @@ const Daily = () => {
         {courses.length > 0 ? (
           courses.map(course => (
             <ThemeCard
-              key={course.id} // courseId'yi kullanarak kartları ayırt edebilirsiniz
+              key={course.id} 
               title={course.courseName}
               currentHours={course.timeEntry?.reduce((total, entry) => total + (entry.dailyHours || 0), 0) || 0}
-              previousHours={getPreviousHours(course.id)} // Önceki hafta saatler
+              previousHours={getPreviousHours(course.id)} 
               backgroundColor={color}
-              iconSrc="images/icon-placeholder.svg" // İkonun gerçek yolunu belirleyin
-              cardClass="default" // Kart sınıfını uygun şekilde ayarlayın
+              iconSrc="images/icon-placeholder.svg" 
+              cardClass="default" 
               state="Previous Day"
             />
           ))

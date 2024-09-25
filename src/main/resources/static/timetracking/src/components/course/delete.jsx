@@ -81,7 +81,7 @@ const UpdateCourse = () => {
     };
 
     fetchCourseData();
-  }, [selectedCourseId]); // selectedCourseId değiştiğinde veri çek
+  }, [selectedCourseId]); 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -89,8 +89,8 @@ const UpdateCourse = () => {
   };
 
   const handleSelectChange = (e) => {
-    setSelectedCourseId(e.target.value); // Seçilen kurs ID'sini güncelle
-    setFormData({ courseName: "", description: "" }); // Yeni bir kurs seçildiğinde formu sıfırla
+    setSelectedCourseId(e.target.value); 
+    setFormData({ courseName: "", description: "" }); 
   };
 
   const handleSubmit = async (e) => {
@@ -148,8 +148,8 @@ const UpdateCourse = () => {
         if (response.ok) {
           alert("Course deleted successfully!");
           setCourses(courses.filter(course => course.id !== selectedCourseId)); // Silinen kursu listeden çıkar
-          setSelectedCourseId(""); // Seçili kursu sıfırla
-          setFormData({ courseName: "", description: "" }); // Formu sıfırla
+          setSelectedCourseId(""); 
+          setFormData({ courseName: "", description: "" }); 
         } else {
           const errorData = await response.json();
           setError(`Error deleting course: ${errorData.message || 'Unknown error'}`);
@@ -162,7 +162,7 @@ const UpdateCourse = () => {
 
   return (
     <div className="signup-card">
-      <h2>Update Course</h2>
+      <h1>Delete Course</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
       
       <select onChange={handleSelectChange} value={selectedCourseId}>

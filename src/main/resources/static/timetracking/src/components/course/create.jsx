@@ -24,7 +24,7 @@ const CourseCreateCard = ({ onClose }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Eğer JWT token kullanıyorsanız
+          Authorization: `Bearer ${localStorage.getItem("token")}`, 
         },
         body: JSON.stringify(formData),
       });
@@ -53,7 +53,7 @@ const CourseCreateCard = ({ onClose }) => {
 
   return (
     <div className="signup-card">
-    <p>Course Register</p>
+    <h1>Course Register</h1>
     <form onSubmit={handleSubmit}>
           <input
             type="text"
