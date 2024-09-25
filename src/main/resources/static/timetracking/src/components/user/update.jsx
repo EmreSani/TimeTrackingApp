@@ -11,7 +11,8 @@ const UpdateUser = () => {
     lastName: "",
     ssn: "",
     phoneNumber: "",
-    password: "",
+    currentPassword: "",
+    newPassword: "",
     email: "",
   });
 
@@ -23,6 +24,7 @@ const UpdateUser = () => {
         setError("No token found, please log in again.");
         return;
       }
+      
   
       try {
         const response = await fetch("http://localhost:8080/user/userAuth", {
@@ -46,7 +48,8 @@ const UpdateUser = () => {
             lastName: userData.lastName || "",
             ssn: userData.ssn || "",
             phoneNumber: userData.phone || "",
-            password: "", // Password alanını sıfırlama //güvenlik açısından şifreyi boş bıraktık
+            currentPassword: userData.currentPassword || "",  
+            newPassword: userData.newPassword || "",  
             email: userData.email || "",
           });
         } else {
@@ -70,12 +73,19 @@ const UpdateUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); 
+    
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError("No token found, please log in again.");
+      return;
+    }
   
     try {
       const response = await fetch("http://localhost:8080/user/updateUser", {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(formData),
       });
@@ -84,20 +94,27 @@ const UpdateUser = () => {
         console.log("User updated successfully!");
         alert("User updated successfully!");
         setTimeout(() => {
-          navigate("/");
+          navigate("/home/weekly");
         }, 2000);
       } else {
         const errorData = await response.json();
-        setError(`Error updating user: ${errorData.message || 'Unknown error'}`);
+        
+        // Hataları ayıklayıp göstermek için
+        if (errorData instanceof Object) {
+          setError(Object.values(errorData).join(", "));
+        } else {
+          setError(`Error updating user: ${errorData.message || 'Unknown error'}`);
+        }
       }
     } catch (error) {
       setError("Network error: " + error.message);
     }
-  };
+};
+
 
   return (
     <div className="signup-card">
-      <h2>Update User</h2>
+      <h1>Update User</h1>
       {error && <p style={{ color: "red" }}>{error}</p>} {/* Hata mesajı */}
       <form onSubmit={handleSubmit}>
         <input
@@ -140,9 +157,17 @@ const UpdateUser = () => {
         />
         <input
           type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
+          name="currentPassword"
+          placeholder="Current Password"
+          value={formData.currentPassword}
+          onChange={handleInputChange}
+        />
+        
+        <input
+          type="password"
+          name="newPassword"
+          placeholder="New Password"
+          value={formData.newPassword}
           onChange={handleInputChange}
         />
         <input
@@ -153,6 +178,7 @@ const UpdateUser = () => {
           onChange={handleInputChange}
           required
         />
+        
         <button className="button-reg" type="submit">Update</button>        
       </form>
 

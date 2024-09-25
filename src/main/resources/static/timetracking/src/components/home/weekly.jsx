@@ -73,7 +73,7 @@ const Weekly = () => {
               key={course.id} 
               title={course.courseName}
               currentHours={course.timeEntry?.reduce((total, entry) => total + (entry.weeklyHours || 0), 0) || 0}
-              previousHours={getPreviousHours(course.id)} 
+              previousHours={getPreviousHours(course.id).toFixed(2)} 
               backgroundColor={color}
               iconSrc="images/icon-placeholder.svg" 
               cardClass="default" 
